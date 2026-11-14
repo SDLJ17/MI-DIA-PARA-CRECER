@@ -65,6 +65,11 @@ details summary{cursor:pointer;font-weight:700;color:var(--muted);font-size:14px
 .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .lesson h3{font-family:Fraunces,serif;font-size:22px;margin:8px 0}
 .ex{background:var(--grow-bg);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:15px}
+.wform{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+.wform label{display:block;font-size:13px;color:var(--muted);margin:8px 0 4px}
+.answer{background:var(--bg);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px;white-space:pre-wrap}
+.answer b{display:block;font-size:12px;color:var(--muted);font-weight:700;margin-top:4px}
+.jentry .title{margin-top:4px}
 .lesson .q{background:var(--learn-bg);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:15px}
 .progress{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:6px}
 .progress i{display:block;height:100%;background:var(--learn)}
@@ -188,6 +193,9 @@ input,select,textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid 
     </form>
     <h2>Últimos 7 días</h2>
     <div class="card bars" id="bars"></div>
+    <h2>📔 Mi diario</h2>
+    <div class="chips" id="jChips"></div>
+    <div id="journal"></div>
     <h2>Historial y análisis diario</h2>
     <div id="history"></div>
     <h2>Copia de seguridad</h2>
@@ -351,8 +359,28 @@ const LEARN={
 };
 
 const EX={"La imprenta de Gutenberg": "Antes, copiar a mano una Biblia podía llevarle meses o incluso un año a un copista; con la imprenta, el taller de Gutenberg produjo unas 180 copias en pocos años.", "La Revolución Francesa": "La Declaración de los Derechos del Hombre y del Ciudadano (1789) inspiró constituciones posteriores, incluidas varias de América Latina tras su independencia.", "Los mayas y el cero": "En la numeración maya un punto vale 1, una barra vale 5 y una concha representa el cero. El 20 se escribe con un punto arriba (una veintena) y una concha abajo (cero unidades), igual que nosotros usamos el 0 en el 10.", "La Revolución Industrial": "Un telar mecánico hacía el trabajo de varios tejedores manuales; por eso ciudades como Manchester crecieron muy rápido alrededor de las fábricas, muchas veces con niños trabajando largas jornadas.", "La caída del Muro de Berlín": "Familias quedaron separadas durante 28 años. La noche en que se abrió, miles de berlineses cruzaron libremente y otros empezaron a picar el muro con martillos para llevarse un pedazo.", "La fotosíntesis": "Un árbol crece casi todo 'a partir del aire': la mayor parte de su madera proviene del carbono del CO₂ que absorben sus hojas, no de la tierra.", "El ADN": "Si estiraras todo el ADN de una sola de tus células mediría alrededor de 2 metros, y aun así cabe dentro de un núcleo microscópico.", "La evolución por selección natural": "Los pinzones de las islas Galápagos tienen picos distintos según su alimento: gruesos para romper semillas duras y finos para atrapar insectos.", "La tabla periódica": "Mendeléyev predijo un elemento que llamó 'eka-silicio' con su masa y propiedades. Años después se descubrió el germanio y coincidió casi exactamente.", "¿Por qué el cielo es azul?": "Por eso el Sol se ve anaranjado al atardecer. En Marte, con poca atmósfera y mucho polvo, ocurre algo curioso: los atardeceres se ven azulados.", "Placas tectónicas": "La India se desplazó hacia el norte y chocó con Asia; ese choque levantó el Himalaya, que todavía crece unos milímetros cada año.", "El río Amazonas": "Su desembocadura es tan grande que el agua dulce todavía se nota en el mar a muchos kilómetros de la costa.", "Corrientes oceánicas": "Londres está a una latitud parecida a la de zonas de Canadá con inviernos durísimos, pero gracias a la Corriente del Golfo sus inviernos son mucho más suaves.", "Los husos horarios": "Cuando en Ciudad de México son las 12:00 del día, en Madrid son las 19:00 (20:00 en verano europeo) y en Tokio ya son las 3:00 de la madrugada del día siguiente.", "El desierto más grande": "En los Valles Secos de la Antártida casi no llueve ni nieva desde hace muchísimo tiempo; los científicos los usan para estudiar condiciones parecidas a las de Marte.", "La perspectiva del Renacimiento": "En 'La Última Cena' de Leonardo da Vinci, las líneas del techo y las paredes convergen en la cabeza de Jesús, y así tu mirada va directo hacia él.", "El Impresionismo": "Monet pintó la catedral de Ruan más de 30 veces a diferentes horas y estaciones para mostrar cómo la luz cambia el mismo edificio.", "El muralismo mexicano": "En la escalera del Palacio Nacional, en la Ciudad de México, Diego Rivera pintó la historia del país desde la época prehispánica hasta el siglo XX.", "Teoría del color": "Muchos carteles de películas y logotipos combinan azul con naranja: al ser complementarios, cada color hace resaltar al otro.", "El claroscuro de Caravaggio": "En 'La vocación de San Mateo' un rayo de luz entra en diagonal y señala a Mateo, como el foco de un escenario en medio de la penumbra.", "Sócrates y las preguntas": "Si alguien dice 'la justicia es obedecer la ley', Sócrates preguntaría: '¿y si la ley es injusta?'. Así obligaba a pensar mejor la definición.", "El estoicismo": "Si hay tráfico camino al trabajo, no controlas el tráfico; sí controlas salir antes mañana y cómo reaccionas hoy: enojado o escuchando un podcast.", "Pienso, luego existo": "Aunque estuvieras soñando que lees esto, el simple hecho de dudar si sueñas demuestra que hay alguien pensando: tú.", "El utilitarismo": "Un gobierno que decide construir un hospital en vez de un estadio porque beneficiará la salud de más personas está razonando de forma utilitarista.", "El existencialismo": "Nadie nace 'siendo' buen amigo o buena pareja: lo vas siendo con cada decisión diaria de escuchar, cuidar y estar presente.", "El interés compuesto": "Si ahorras $1,000 al 10% anual: al primer año tienes $1,100; al segundo, $1,210 (ganaste $110, no $100, porque los intereses también generaron intereses). En unos 7 años casi se duplica.", "Oferta y demanda": "Los boletos de avión suben en vacaciones: mucha gente quiere viajar en las mismas fechas y el número de asientos es el mismo.", "La inflación": "Con una inflación del 5% anual, lo que hoy cuesta $100 costará unos $105 en un año. Si tu sueldo no sube, con el mismo dinero compras menos.", "El costo de oportunidad": "Si dedicas el sábado a trabajar horas extra, el costo de oportunidad es el descanso o el tiempo en pareja que dejaste de tener.", "La diversificación": "Si inviertes todo en una sola empresa y quiebra, lo pierdes todo; si inviertes en 20 empresas de sectores distintos, una caída afecta solo una parte.", "Cómo viaja la información en internet": "Cuando envías una foto por WhatsApp, se divide en cientos de paquetes que viajan por cables (incluso submarinos) y servidores distintos antes de reunirse en el teléfono de destino.", "¿Qué es un algoritmo?": "Algoritmo para preparar café: 1) hervir agua, 2) poner café en el filtro, 3) verter el agua, 4) esperar 4 minutos, 5) servir. Si cambias el orden, el resultado falla.", "Aprendizaje automático": "Para que una app reconozca gatos no se le explica qué es un gato: se le muestran miles de fotos marcadas como 'gato' y 'no gato' hasta que aprende los patrones.", "Contraseñas y verificación en dos pasos": "'tortuga-azul-come-mango-77' es más fácil de recordar y mucho más difícil de adivinar que 'T0rt!1'. Con verificación en dos pasos, además, se pide un código de tu teléfono.", "El sistema binario": "Cada posición vale el doble que la anterior: 1, 2, 4, 8, 16, 32… Así, 35 = 32 + 2 + 1 y en binario se escribe 100011.", "El sesgo de confirmación": "Si crees que alguien te cae mal, notarás cada error suyo y pasarás por alto sus gestos amables, reforzando tu idea inicial.", "Cómo se forman los hábitos": "Señal: terminar de lavarte los dientes en la noche. Rutina: escribir 3 cosas por las que agradeces. Recompensa: marcarlo en esta página y ver crecer tu racha.", "Mentalidad de crecimiento": "En lugar de 'no soy bueno para los números', alguien con mentalidad de crecimiento diría 'todavía no domino esto, pero puedo practicar'.", "Inteligencia emocional": "En vez de decir 'estoy mal', decir 'me siento frustrado porque esperaba ayuda y no la recibí' ayuda a tu pareja a entenderte y a ti a calmarte.", "El efecto Dunning-Kruger": "Alguien que lleva un mes jugando ajedrez puede creer que juega muy bien, mientras que un gran maestro suele decir que aún le queda mucho por aprender.", "Don Quijote de la Mancha": "En la famosa escena de los molinos de viento, Don Quijote cree que son gigantes y los ataca con su lanza, mientras Sancho Panza le advierte que solo son molinos.", "El realismo mágico": "En 'Cien años de soledad' una joven sube al cielo mientras dobla sábanas en el patio, y el narrador lo cuenta con la misma calma que un día cualquiera.", "El viaje del héroe": "En muchas películas animadas el protagonista huye de su destino, encuentra mentores, enfrenta su mayor miedo y regresa transformado: es el viaje del héroe completo.", "Sor Juana Inés de la Cruz": "Ella misma contó que de niña se cortaba el cabello y se proponía aprender algo antes de que volviera a crecer; si no lo lograba, lo cortaba otra vez.", "El haiku": "Un ejemplo original: 'Lluvia de otoño / el café ya está tibio / tú aún no llegas'. Pocas palabras, una imagen y una emoción.", "Los ciclos del sueño": "Si duermes 7 horas y media completas unos 5 ciclos. Despertar al final de un ciclo suele sentirse mucho mejor que hacerlo en pleno sueño profundo.", "La microbiota intestinal": "Alimentos fermentados como el yogur natural o el kéfir, y otros ricos en fibra como frijoles, avena y plátano, ayudan a mantener una microbiota variada.", "Cómo trabaja el corazón": "A unos 70 latidos por minuto, tu corazón late alrededor de 100,000 veces al día y bombea miles de litros de sangre sin descanso.", "El sistema inmune": "Cuando te raspas, la zona se enrojece y se inflama: es la defensa innata enviando células a combatir los microbios que entraron.", "El cerebro y el ejercicio": "Después de una caminata de 20 minutos muchas personas se concentran mejor y se sienten de mejor humor: prueba a caminar antes de estudiar."};
+const WRITE={
+ "Diario de gratitud":["Hoy agradezco… (1)","Hoy agradezco… (2)","Hoy agradezco… (3)","¿Por qué son importantes para ti?"],
+ "Lectura con propósito":["¿Qué leíste?","Una idea útil que te llevas"],
+ "Aprender de un error":["¿Qué salió mal?","¿Qué aprendiste?","¿Qué harás distinto la próxima vez?"],
+ "Meta de la semana":["Mi meta para esta semana","Paso 1","Paso 2","Paso 3"],
+ "Habilidad nueva":["¿Qué practicaste?","¿Cómo te fue y qué sigue?"],
+ "Podcast o charla educativa":["¿Qué escuchaste o viste?","Idea 1","Idea 2"],
+ "Carta a tu yo futuro":["Querido yo del futuro…"],
+ "Práctica de idioma":["Palabras o frases nuevas que aprendiste"],
+ "Revisión de finanzas":["¿Qué notaste en tus gastos?","Un ajuste pequeño que harás"],
+ "Ordenar un espacio":["¿Qué ordenaste y cómo te sentiste?"],
+ "Pequeño reto de valentía":["¿Qué hiciste?","¿Cómo te sentiste antes y después?"],
+ "Mapa de valores":["Mis 5 valores principales","¿Mi semana los reflejó? ¿En qué sí y en qué no?"],
+ "Meditación breve":["¿Qué notaste en tu mente o tu cuerpo?"],
+ "Plato equilibrado":["¿Qué comiste?"],
+ "Cocina casera":["¿Qué preparaste?"],
+ "Fuerza con tu peso":["¿Qué ejercicios y cuántas repeticiones hiciste?"]
+};
+const BIG=new Set(["Carta a tu yo futuro","Querido yo del futuro…"]);
+let openWrite=null; const drafts={};
 /* ---------- Estado ---------- */
-let state={log:[],learned:{},goals:[],refl:{},habits:[]};
+let state={log:[],learned:{},goals:[],refl:{},habits:[],journal:[]};
 let db=null, docRef=null, saveTimer=null;
 const LS="crecer.v1"; let LSKEY=LS;
 const $=s=>document.querySelector(s);
@@ -363,7 +391,7 @@ const TODAY=dkey(new Date());
 function seed(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1800)}
 
-function loadLocal(){try{const s=JSON.parse(localStorage.getItem(LSKEY));if(s&&s.log)state=Object.assign({goals:[],refl:{},habits:[]},s)}catch(e){}}
+function loadLocal(){try{const s=JSON.parse(localStorage.getItem(LSKEY));if(s&&s.log)state=Object.assign({goals:[],refl:{},habits:[],journal:[]},s)}catch(e){}}
 function saveLocal(){try{localStorage.setItem(LSKEY,JSON.stringify(state))}catch(e){}}
 function save(){
   saveLocal();
@@ -371,7 +399,7 @@ function save(){
   clearTimeout(saveTimer);
   $("#sync").textContent="Guardando…";
   saveTimer=setTimeout(async()=>{
-    try{await docRef.set({log:state.log,learned:state.learned,plan:state.plan||{},goals:state.goals||[],refl:state.refl||{},habits:state.habits||[]});$("#sync").textContent="☁️ Guardado"}
+    try{await docRef.set({log:state.log,learned:state.learned,plan:state.plan||{},goals:state.goals||[],refl:state.refl||{},habits:state.habits||[],journal:state.journal||[]});$("#sync").textContent="☁️ Guardado"}
     catch(e){$("#sync").textContent="Guardado en este dispositivo"}
   },700);
 }
@@ -433,12 +461,34 @@ function shuffleCat(c){
   else{let n;do{n=Math.floor(Math.random()*IDEAS[c].length)}while(n===p[c]&&IDEAS[c].length>1);p[c]=n}
   save();renderPlan();
 }
+function jFind(type,key,date){return (state.journal||[]).find(j=>j.type===type&&j.key===key&&j.date===(date||TODAY))}
+function answerHTML(j){return j?`<div class="answer">${j.fields.filter(f=>f.a).map(f=>`<b>${esc(f.q)}</b>${esc(f.a)}`).join("")}</div>`:""}
+function writeForm(id,qs,saveLbl){
+  return `<form class="wform" data-wform="${esc(id)}">${qs.map((q,i)=>`<label>${esc(q)}</label><textarea rows="${BIG.has(q)?7:2}" data-wq="${i}">${esc((drafts[id]||[])[i]||"")}</textarea>`).join("")}
+  <div class="btns"><button class="btn pri" type="submit">${saveLbl}</button><button class="btn" type="button" data-wcancel="1">Cancelar</button></div></form>`;
+}
+function saveJournal(type,key,cat,qs,answers,extra){
+  state.journal=state.journal||[];
+  const fields=qs.map((q,i)=>({q,a:(answers[i]||"").trim()}));
+  const ex=jFind(type,key);
+  if(ex){ex.fields=fields;ex.edited=Date.now()}
+  else state.journal.unshift(Object.assign({id:"j"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),date:TODAY,type,key,cat,fields,ts:Date.now()},extra||{}));
+}
 function ideaCard(c,item,opts={}){
-  const [t,d,m]=item; const done=doneToday(t);
+  const [t,d,m]=item; const done=doneToday(t); const qs=WRITE[t]; const wid="act:"+t; const j=qs&&jFind("act",t);
+  const open=qs&&openWrite===wid;
   return `<div class="card ${c}"><div class="row"><span class="tag">${CATS[c].emoji} ${CATS[c].name}</span>${m?`<span class="sync">~${m} min</span>`:""}</div>
   <div class="title">${esc(t)}</div><p class="desc">${esc(d)}</p>
-  <div class="btns"><button class="btn ${done?"done":"pri"}" data-do="${c}|${esc(t)}|${m}" ${done?"disabled":""}>${done?"✓ Hecho":"Marcar como hecho"}</button>
-  ${opts.shuffle?`<button class="btn" data-shuffle="${c}">↻ Otra</button>`:""}</div></div>`;
+  ${j&&!open?answerHTML(j):""}
+  ${open?writeForm(wid,qs,done?"Guardar":"Guardar y marcar como hecho"):`<div class="btns">
+  ${qs?`<button class="btn ${j?"":"pri"}" data-write="${esc(wid)}">${j?"✏️ Editar respuesta":"✍️ Escribir"}</button>`:""}
+  <button class="btn ${done?"done":(qs?"":"pri")}" data-do="${c}|${esc(t)}|${m}" ${done?"disabled":""}>${done?"✓ Hecho":"Marcar como hecho"}</button>
+  ${opts.shuffle?`<button class="btn" data-shuffle="${c}">↻ Otra</button>`:""}</div>`}</div>`;
+}
+function reflectBlock(a,i,where){
+  const tp=LEARN[a].t[i], wid="les:"+where+":"+tp[0], j=jFind("les",tp[0]);
+  if(openWrite===wid)return writeForm(wid,["Tu respuesta"],state.learned[topicKey(a,i)]?"Guardar respuesta":"Guardar y marcar como aprendido");
+  return (j?answerHTML(j):"")+`<div class="btns" style="margin-top:8px"><button class="btn" data-write="${esc(wid)}">${j?"✏️ Editar mi respuesta":"✍️ Escribir mi respuesta"}</button></div>`;
 }
 function renderPlan(){
   const p=getPlan();
@@ -448,6 +498,7 @@ function renderPlan(){
   <div class="title">${LEARN[a].e} ${esc(tp[0])}</div><p style="margin:4px 0 0">${esc(tp[1])}</p>
   ${EX[tp[0]]?`<div class="ex">💡 <b>Ejemplo:</b> ${esc(EX[tp[0]])}</div>`:""}
   <div class="ex" style="background:var(--learn-bg)">💭 <b>Para reflexionar:</b> ${esc(tp[2])}</div>
+  ${reflectBlock(a,i,"hoy")}
   <div class="btns"><button class="btn ${ld?"done":"pri"}" data-learn="${esc(a)}|${i}" ${ld?"disabled":""}>${ld?"✓ Aprendido":"Lo aprendí"}</button><button class="btn" data-open="${esc(a)}|${i}">Ver en Aprender</button><button class="btn" data-shuffle="learn">↻ Otro tema</button></div></div>`;
   $("#plan").innerHTML=h;
 }
@@ -467,7 +518,8 @@ function pickLearn(rand){
   const pool=pend.length?pend:LEARN[a].t.map((_,i)=>i);
   return [a,rand?pool[Math.floor(Math.random()*pool.length)]:pool[0]];
 }
-function showLesson(a,i,why){
+function showLesson(a,i,why,noScroll){
+  curLesson=[a,i];
   const tp=LEARN[a].t[i]; const ld=!!state.learned[topicKey(a,i)];
   $("#lesson").innerHTML=`<div class="card learn lesson">
    <span class="tag">${LEARN[a].e} ${esc(a)}</span>
@@ -475,9 +527,10 @@ function showLesson(a,i,why){
    <h3>${esc(tp[0])}</h3><p style="margin:0">${esc(tp[1])}</p>
    ${EX[tp[0]]?`<div class="ex">💡 <b>Ejemplo:</b> ${esc(EX[tp[0]])}</div>`:""}
    <div class="q">💭 <b>Para reflexionar:</b> ${esc(tp[2])}</div>
+   ${reflectBlock(a,i,"apr")}
    <div class="btns"><button class="btn ${ld?"done":"pri"}" data-learn="${esc(a)}|${i}" ${ld?"disabled":""}>${ld?"✓ Aprendido":"Lo aprendí"}</button>
    ${i<LEARN[a].t.length-1?`<button class="btn" data-lesson="${esc(a)}|${i+1}">Siguiente tema →</button>`:""}</div></div>`;
-  $("#lesson").scrollIntoView({behavior:"smooth",block:"start"});
+  if(!noScroll)$("#lesson").scrollIntoView({behavior:"smooth",block:"start"});
 }
 let openArea=null;
 function renderAreas(){
@@ -618,7 +671,7 @@ function renderTodayAnalysis(){
 function backupText(){return JSON.stringify({app:"mi-dia-para-crecer",v:2,state})}
 function importData(txt){
   try{const o=JSON.parse(txt);const s=o.state||o;if(!s||!Array.isArray(s.log))throw 0;
-    state.log=mergeById(state.log,s.log);state.goals=mergeById(state.goals||[],s.goals||[]);state.habits=mergeById(state.habits||[],s.habits||[]);
+    state.log=mergeById(state.log,s.log);state.goals=mergeById(state.goals||[],s.goals||[]);state.habits=mergeById(state.habits||[],s.habits||[]);state.journal=mergeById(state.journal||[],s.journal||[]);
     state.learned=Object.assign({},s.learned||{},state.learned);state.refl=Object.assign({},s.refl||{},state.refl);
     state.log.sort((a,b)=>b.date.localeCompare(a.date));save();renderAll();toast("Datos importados ✅")}
   catch(e){toast("Ese archivo no tiene datos válidos")}
@@ -632,7 +685,24 @@ async function exportFile(){
     const b=new Blob([txt],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();toast("Archivo exportado");
   }catch(e){toast("No se pudo descargar; usa 'Copiar datos'")}
 }
-function renderAll(){renderStats();renderPlan();renderHabits();renderTodayAnalysis();renderIdeas();renderAreas();renderLog();renderWeek()}
+let jFilter="all";
+function renderJournal(){
+  const F={all:"Todo",act:"Actividades",les:"Lecciones",week:"Reflexiones semanales"};
+  $("#jChips").innerHTML=Object.keys(F).map(k=>`<button class="chip ${k===jFilter?"on":""}" data-jf="${k}">${F[k]}</button>`).join("");
+  let items=(state.journal||[]).map(j=>({...j,kind:j.type}));
+  Object.entries(state.refl||{}).forEach(([wk,r])=>{if(r&&(r.good||r.improve||r.thanks))items.push({id:"w"+wk,kind:"week",date:wk,key:"Reflexión de la semana",cat:"grow",
+    fields:[{q:"Lo mejor de la semana",a:r.good},{q:"Qué quiero mejorar",a:r.improve},{q:"Algo que agradezco",a:r.thanks}]})});
+  if(jFilter!=="all")items=items.filter(x=>x.kind===jFilter);
+  items.sort((a,b)=>b.date.localeCompare(a.date)||(b.ts||0)-(a.ts||0));
+  if(!items.length){$("#journal").innerHTML=`<div class="empty">Aún no has escrito nada. Busca el botón ✍️ Escribir en las actividades y lecciones.</div>`;return}
+  $("#journal").innerHTML=items.slice(0,60).map(x=>{
+    const dt=new Date(x.date+"T12:00:00").toLocaleDateString("es-MX",{weekday:"short",day:"numeric",month:"short"});
+    const tag=x.kind==="les"?`<span class="tag learn">📚 Lección</span>`:x.kind==="week"?`<span class="tag grow">🎯 Semana del ${esc(dt)}</span>`:`<span class="tag ${x.cat}">${CATS[x.cat]?.emoji||""} ${CATS[x.cat]?.name||""}</span>`;
+    return `<div class="card jentry ${x.kind==="les"?"learn":x.cat}"><div class="row">${tag}<span class="sync">${x.kind==="week"?"":esc(dt)}</span></div>
+      <div class="title">${esc(x.key)}</div>${answerHTML(x)}
+      ${x.kind!=="week"?`<div class="btns"><button class="btn" data-jdel="${x.id}">Eliminar</button></div>`:""}</div>`}).join("");
+}
+function renderAll(){renderStats();renderPlan();renderHabits();renderTodayAnalysis();renderIdeas();renderAreas();renderLog();renderWeek();renderJournal()}
 
 /* ---------- Eventos ---------- */
 document.addEventListener("click",e=>{
@@ -653,10 +723,39 @@ document.addEventListener("click",e=>{
   if(t.id==="expBtn"){exportFile();return}
   if(t.id==="copyBtn"){navigator.clipboard.writeText(backupText()).then(()=>toast("Datos copiados 📋"),()=>{$("#impText").value=backupText();$("#impText").select();toast("Cópialos del cuadro de texto")});return}
   if(t.id==="impTextBtn"){if($("#impText").value.trim())importData($("#impText").value.trim());return}
+  if(t.dataset.write){openWrite=t.dataset.write;const j=t.dataset.write.startsWith("act:")?jFind("act",t.dataset.write.slice(4)):jFind("les",t.dataset.write.split(":").slice(2).join(":"));
+    if(j&&!drafts[openWrite])drafts[openWrite]=j.fields.map(f=>f.a);renderPlan();renderIdeas();refreshLesson();
+    setTimeout(()=>{const f=[...document.querySelectorAll(`[data-wform="${CSS.escape(openWrite)}"] textarea`)].find(x=>x.offsetParent);if(f){f.focus();f.scrollIntoView({block:"center",behavior:"smooth"})}},50);return}
+  if(t.dataset.wcancel){openWrite=null;renderPlan();renderIdeas();refreshLesson();return}
+  if(t.dataset.jf){jFilter=t.dataset.jf;renderJournal();return}
+  if(t.dataset.jdel){state.journal=state.journal.filter(j=>j.id!==t.dataset.jdel);save();renderJournal();renderPlan();renderIdeas();toast("Entrada eliminada");return}
   if(t.id==="wPrev"){wOffset--;renderWeek();return}
   if(t.id==="wNext"){if(wOffset<0)wOffset++;renderWeek();return}
   if(t.dataset.gadd){addGoal(t.dataset.gadd);return}
   if(t.dataset.gdel){state.goals=state.goals.filter(g=>g.id!==t.dataset.gdel);save();renderWeek();return}
+});
+let curLesson=null;
+function refreshLesson(){if(curLesson&&!$("#v-aprender").classList.contains("hidden"))showLesson(curLesson[0],curLesson[1],null,true)}
+document.addEventListener("input",e=>{const f=e.target.closest("[data-wform]");if(!f)return;const id=f.dataset.wform;
+  drafts[id]=[...f.querySelectorAll("textarea")].map(x=>x.value)});
+document.addEventListener("submit",e=>{const f=e.target.closest("[data-wform]");if(!f)return;e.preventDefault();
+  const id=f.dataset.wform, ans=[...f.querySelectorAll("textarea")].map(x=>x.value);
+  if(!ans.some(a=>a.trim())){toast("Escribe al menos una respuesta");return}
+  if(id.startsWith("act:")){
+    const t=id.slice(4); let c="grow",m=0;
+    for(const k of ["grow","health"]){const it=IDEAS[k].find(x=>x[0]===t);if(it){c=k;m=it[2]}}
+    saveJournal("act",t,c,WRITE[t],ans);
+    if(t==="Meta de la semana"&&ans[0].trim()){const wk=weekKeys(0)[0];state.goals=state.goals||[];if(!state.goals.some(g=>g.week===wk&&g.text===ans[0].trim()))state.goals.push({id:"g"+Date.now().toString(36),week:wk,text:ans[0].trim(),done:false})}
+    openWrite=null;delete drafts[id];
+    if(!doneToday(t))addLog({cat:c,title:t,min:m,note:ans.find(a=>a.trim()).trim().slice(0,80)});else{save();renderAll();toast("Respuesta guardada ✍️")}
+  }else{
+    const key=id.split(":").slice(2).join(":"); let a0,i0;
+    for(const a in LEARN)LEARN[a].t.forEach((tp,i)=>{if(tp[0]===key){a0=a;i0=i}});
+    saveJournal("les",key,"learn",[LEARN[a0].t[i0][2]],ans,{area:a0});
+    openWrite=null;delete drafts[id];
+    if(!state.learned[topicKey(a0,i0)])markLearned(a0,i0);else{save();renderAll()}
+    refreshLesson();toast("Respuesta guardada ✍️");
+  }
 });
 document.addEventListener("change",e=>{const hb=e.target.dataset&&e.target.dataset.habit;
   if(hb){const x=state.habits.find(z=>z.id===hb);if(!x)return;
@@ -706,15 +805,15 @@ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}ca
 
 const SKIP="crecer.skip";
 const skipped=()=>{try{return localStorage.getItem(SKIP)==="1"}catch(e){return false}};
-const fresh=()=>({log:[],learned:{},goals:[],refl:{},habits:[]});
+const fresh=()=>({log:[],learned:{},goals:[],refl:{},habits:[],journal:[]});
 const showLogin=v=>$("#login").classList.toggle("hidden",!v);
 function merge(a,b){ // a = base (nube), b = local
   b=Object.assign(fresh(),b||{}); a=Object.assign(fresh(),a||{});
   return {log:mergeById(a.log,b.log).sort((x,y)=>y.date.localeCompare(x.date)),
     learned:Object.assign({},b.learned,a.learned),plan:a.plan||b.plan||{},
-    goals:mergeById(a.goals,b.goals),refl:Object.assign({},b.refl,a.refl),habits:mergeById(a.habits,b.habits)};
+    goals:mergeById(a.goals,b.goals),refl:Object.assign({},b.refl,a.refl),habits:mergeById(a.habits,b.habits),journal:mergeById(a.journal,b.journal)};
 }
-const sameSize=(a,b)=>a.log.length===b.log.length&&a.goals.length===b.goals.length&&a.habits.length===b.habits.length&&Object.keys(a.learned).length===Object.keys(b.learned).length&&Object.keys(a.refl).length===Object.keys(b.refl).length;
+const sameSize=(a,b)=>a.log.length===b.log.length&&a.goals.length===b.goals.length&&a.habits.length===b.habits.length&&a.journal.length===b.journal.length&&Object.keys(a.learned).length===Object.keys(b.learned).length&&Object.keys(a.refl).length===Object.keys(b.refl).length;
 
 async function login(){
   $("#loginErr").textContent="";
@@ -751,7 +850,7 @@ onAuthStateChanged(auth,async u=>{
   const anon=LSKEY===LS?state:fresh();
   LSKEY=LS+"."+u.uid;state=fresh();loadLocal();
   state=merge(state,anon);
-  if(anon.log.length||anon.habits.length||anon.goals.length){try{localStorage.removeItem(LS)}catch(_){}}
+  if(anon.log.length||anon.habits.length||anon.goals.length||anon.journal.length){try{localStorage.removeItem(LS)}catch(_){}}
   renderAll();
   const ref=doc(fs,"users",u.uid,"data","estado");
   docRef={set:d=>setDoc(ref,JSON.parse(JSON.stringify(d)))};
