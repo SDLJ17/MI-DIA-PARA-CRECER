@@ -5,6 +5,7 @@ Página para llevar un registro diario de actividades de crecimiento personal, s
 - Plan diario sugerido y actividades propias.
 - Lecciones breves de cultura general.
 - Análisis diario y revisión semanal con metas.
+- Disponible en español e inglés (selector 🌐).
 - Inicio de sesión con Google (Firebase): cada persona ve solo sus propios datos.
 
 Publicada con GitHub Pages: https://sdlj17.github.io/MI-DIA-PARA-CRECER/
