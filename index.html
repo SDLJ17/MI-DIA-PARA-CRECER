@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Día para Crecer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf6f0; --card:#ffffff; --ink:#2b2622; --muted:#7a6f66; --line:#ece4da;
+  --grow:#c2703d; --grow-bg:#fbeee4;
+  --health:#3f8a6b; --health-bg:#e6f3ec;
+  --couple:#b5487a; --couple-bg:#f9e7ef;
+  --learn:#3d6aa8; --learn-bg:#e7eef8;
+  --other:#8a6d1f; --other-bg:#f6efd9;
+  --r:16px;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#1c1917;--card:#26221f;--ink:#f3ede6;--muted:#a8998c;--line:#3a332e;
+  --grow-bg:#3a2a1f;--health-bg:#1f3329;--couple-bg:#3a2130;--learn-bg:#1f2a3a;
+  --other-bg:#3a321c;--other:#e0c36a;--grow:#e39a68;--health:#6cc49d;--couple:#e47fae;--learn:#7fa8e0}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito Sans",system-ui,sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 110px}
+header h1{font-family:Fraunces,serif;font-size:30px;margin:0;line-height:1.1}
+header p{margin:4px 0 0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;text-align:center}
+.stat b{display:block;font-family:Fraunces,serif;font-size:26px}
+.stat span{font-size:12px;color:var(--muted)}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:5;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;max-width:190px;background:none;border:0;padding:10px 4px 12px;font:inherit;font-size:12px;color:var(--muted);cursor:pointer}
+nav button .ic{display:block;font-size:20px}
+nav button.on{color:var(--ink);font-weight:700}
+h2{font-family:Fraunces,serif;font-size:22px;margin:24px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
+.tag{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:99px}
+.grow .tag,.tag.grow{background:var(--grow-bg);color:var(--grow)}
+.health .tag,.tag.health{background:var(--health-bg);color:var(--health)}
+.couple .tag,.tag.couple{background:var(--couple-bg);color:var(--couple)}
+.learn .tag,.tag.learn{background:var(--learn-bg);color:var(--learn)}
+.other .tag,.tag.other{background:var(--other-bg);color:var(--other)}
+.card.other{border-left:5px solid var(--other)}
+.score{display:flex;align-items:center;gap:14px}
+.ring{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;flex:none}
+.ring b{background:var(--card);width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-family:Fraunces,serif;font-size:18px}
+.msgs{margin:10px 0 0;padding-left:18px;font-size:14px}
+.msgs li{margin:3px 0}
+details summary{cursor:pointer;font-weight:700;color:var(--muted);font-size:14px}
+.dayrow{display:grid;grid-template-columns:80px 1fr 40px;gap:8px;align-items:center;font-size:13px;margin:5px 0}
+.card.grow{border-left:5px solid var(--grow)}.card.health{border-left:5px solid var(--health)}
+.card.couple{border-left:5px solid var(--couple)}.card.learn{border-left:5px solid var(--learn)}
+.row{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.title{font-weight:700;margin:6px 0 2px}
+.desc{color:var(--muted);font-size:14px;margin:0}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:8px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn.pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.done{background:var(--health-bg);color:var(--health);border-color:transparent}
+.btn:disabled{opacity:.6;cursor:default}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lesson h3{font-family:Fraunces,serif;font-size:22px;margin:8px 0}
+.lesson .q{background:var(--learn-bg);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:15px}
+.progress{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:6px}
+.progress i{display:block;height:100%;background:var(--learn)}
+.areas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.area{text-align:left;cursor:pointer;font:inherit;color:var(--ink)}
+.area small{color:var(--muted)}
+form.card label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bars .b{display:grid;grid-template-columns:92px 1fr 54px;gap:8px;align-items:center;font-size:14px;margin:6px 0}
+.bars .track{height:12px;background:var(--line);border-radius:99px;overflow:hidden}
+.bars .track i{display:block;height:100%;border-radius:99px}
+.day{font-weight:700;color:var(--muted);font-size:13px;margin:16px 0 6px;text-transform:capitalize}
+.log{display:flex;gap:10px;align-items:flex-start}
+.log .x{margin-left:auto;background:none;border:0;color:var(--muted);cursor:pointer;font-size:18px}
+.empty{color:var(--muted);text-align:center;padding:22px}
+.week{display:flex;gap:6px;margin-top:8px}
+.week div{flex:1;text-align:center;font-size:11px;color:var(--muted)}
+.week div i{display:block;height:28px;border-radius:8px;background:var(--line);margin-bottom:3px}
+.week div i.on{background:var(--health)}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.show{opacity:1}
+.sync{font-size:12px;color:var(--muted)}
+.overlay{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:20;padding:20px}
+#account .btn{padding:4px 10px;font-size:12px}
+.hidden{display:none !important}
+.goal{display:flex;align-items:center;gap:10px}
+.goal input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--health)}
+.goal.done span{text-decoration:line-through;color:var(--muted)}
+.wk{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.wk b{font-family:Fraunces,serif;font-size:17px;text-align:center}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.kpis div{background:var(--bg);border-radius:12px;padding:10px}
+.kpis b{font-family:Fraunces,serif;font-size:22px;display:block}
+.kpis span{font-size:12px;color:var(--muted)}
+.private{font-size:12px;color:var(--muted);text-align:center;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="row"><div>
+      <h1>Mi Día para Crecer</h1>
+      <p id="today"></p></div>
+      <div style="text-align:right"><span class="sync" id="sync"></span><div id="account" style="margin-top:4px"></div></div>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b id="sStreak">0</b><span>días de racha</span></div>
+    <div class="stat"><b id="sToday">0</b><span>actividades hoy</span></div>
+    <div class="stat"><b id="sLearned">0</b><span>temas aprendidos</span></div>
+  </div>
+
+  <!-- HOY -->
+  <section id="v-hoy">
+    <h2>Tu plan de hoy</h2>
+    <p class="desc" style="margin-bottom:12px">Una propuesta equilibrada para hoy. Márcala al terminar o cámbiala por otra.</p>
+    <div id="plan"></div>
+    <h2>Mis actividades diarias</h2>
+    <div id="habits"></div>
+    <div class="card">
+      <details id="habitDetails"><summary>➕ Agregar o editar mis actividades</summary>
+      <form id="habitForm" style="margin-top:10px">
+        <label>Actividad</label><input id="hTitle" required placeholder="Ej. Tomar vitaminas, orar, practicar piano">
+        <div class="two">
+          <div><label>Categoría</label><select id="hCat"><option value="grow">Crecimiento</option><option value="health">Salud</option><option value="couple">Pareja</option><option value="learn">Aprendizaje</option><option value="other">Otros</option></select></div>
+          <div><label>Minutos</label><input id="hMin" type="number" min="0" value="15"></div>
+        </div>
+        <label>¿Qué días?</label>
+        <select id="hDays"><option value="diario">Todos los días</option><option value="lv">Lunes a viernes</option><option value="fs">Fines de semana</option></select>
+        <div class="btns"><button class="btn pri" type="submit">Guardar actividad</button></div>
+      </form>
+      <div id="habitList" style="margin-top:12px"></div></details>
+    </div>
+    <h2>Análisis de hoy</h2>
+    <div class="card" id="todayAnalysis"></div>
+    <h2>Esta semana</h2>
+    <div class="card"><div class="week" id="week"></div></div>
+  </section>
+
+  <!-- SUGERENCIAS -->
+  <section id="v-ideas" class="hidden">
+    <h2>Ideas de actividades</h2>
+    <div class="chips" id="catChips"></div>
+    <div id="ideas"></div>
+    <div id="talkBox"></div>
+  </section>
+
+  <!-- APRENDER -->
+  <section id="v-aprender" class="hidden">
+    <h2>¿Qué aprendo hoy?</h2>
+    <div class="btns" style="margin-top:0">
+      <button class="btn pri" id="suggestLearn">✨ ¿Qué debería aprender?</button>
+      <button class="btn" id="randomLearn">🎲 Tema al azar</button>
+    </div>
+    <div id="lesson" style="margin-top:14px"></div>
+    <h2>O elige un área</h2>
+    <div class="areas" id="areas"></div>
+    <div id="areaTopics"></div>
+  </section>
+
+  <!-- REGISTRO -->
+  <section id="v-registro" class="hidden">
+    <h2>Registrar actividad</h2>
+    <form class="card" id="addForm">
+      <label>¿Qué hiciste?</label>
+      <input id="fTitle" required placeholder="Ej. Caminé en el parque">
+      <div class="two">
+        <div><label>Categoría</label>
+          <select id="fCat"><option value="grow">Crecimiento</option><option value="health">Salud</option><option value="couple">Pareja</option><option value="learn">Aprendizaje</option><option value="other">Otros</option></select></div>
+        <div><label>Minutos</label><input id="fMin" type="number" min="0" value="20"></div>
+      </div>
+      <div class="two">
+        <div><label>Fecha</label><input id="fDate" type="date"></div>
+        <div><label>¿Cómo te sentiste?</label>
+          <select id="fMood"><option>😊</option><option>😌</option><option>💪</option><option>🥰</option><option>😐</option><option>😴</option></select></div>
+      </div>
+      <label>Nota (opcional)</label>
+      <textarea id="fNote" rows="2" placeholder="Algo que quieras recordar"></textarea>
+      <div class="btns"><button class="btn pri" type="submit">Guardar</button></div>
+    </form>
+    <h2>Últimos 7 días</h2>
+    <div class="card bars" id="bars"></div>
+    <h2>Historial y análisis diario</h2>
+    <div id="history"></div>
+    <h2>Copia de seguridad</h2>
+    <div class="card"><p class="desc">Guarda una copia de tus datos o pásalos a otro dispositivo.</p>
+      <div class="btns"><button class="btn" id="expBtn">⬇️ Exportar</button><button class="btn" id="copyBtn">📋 Copiar datos</button>
+      <label class="btn" style="margin:0;color:var(--ink);font-size:14px">⬆️ Importar<input type="file" id="impFile" accept=".json,application/json" class="hidden"></label></div>
+      <textarea id="impText" rows="2" placeholder="…o pega aquí datos copiados y presiona Importar texto" style="margin-top:10px"></textarea>
+      <div class="btns"><button class="btn" id="impTextBtn">Importar texto</button></div>
+    </div>
+  </section>
+  <!-- SEMANA -->
+  <section id="v-semana" class="hidden">
+    <h2>Revisión semanal</h2>
+    <div class="card wk"><button class="btn" id="wPrev">‹</button><b id="wLabel"></b><button class="btn" id="wNext">›</button></div>
+    <div class="card" id="wSummary"></div>
+    <h2>Metas de la semana</h2>
+    <div id="wGoals"></div>
+    <form class="card" id="goalForm">
+      <div class="row"><input id="gText" placeholder="Nueva meta, ej. Caminar 3 veces" required><button class="btn pri" type="submit">Añadir</button></div>
+      <p class="desc" style="margin-top:10px">Ideas rápidas:</p>
+      <div class="chips" id="gSuggest" style="margin-bottom:0"></div>
+    </form>
+    <h2>Reflexión</h2>
+    <form class="card" id="reflForm">
+      <label>🌟 Lo mejor de esta semana</label><textarea id="rGood" rows="2"></textarea>
+      <label>🔧 Qué quiero mejorar</label><textarea id="rImprove" rows="2"></textarea>
+      <label>🙏 Algo que agradezco (a mí, a mi pareja, a la vida)</label><textarea id="rThanks" rows="2"></textarea>
+      <div class="btns"><button class="btn pri" type="submit">Guardar reflexión</button></div>
+    </form>
+  </section>
+  <p class="private">🔒 Tus registros, metas y reflexiones son privados: cada persona entra con su cuenta de Google y ve solo los suyos.</p>
+</div>
+
+<nav id="nav">
+  <button data-v="hoy" class="on"><span class="ic">☀️</span>Hoy</button>
+  <button data-v="ideas"><span class="ic">💡</span>Ideas</button>
+  <button data-v="aprender"><span class="ic">📚</span>Aprender</button>
+  <button data-v="registro"><span class="ic">📝</span>Registro</button>
+  <button data-v="semana"><span class="ic">🎯</span>Semana</button>
+</nav>
+<div class="toast" id="toast"></div>
+<div id="login" class="overlay hidden"><div class="card" style="max-width:380px;text-align:center;padding:28px 22px">
+  <div style="font-size:44px">🌱</div>
+  <h1 style="font-family:Fraunces,serif;margin:6px 0">Mi Día para Crecer</h1>
+  <p class="desc">Entra con tu cuenta de Google para guardar tu progreso en la nube y verlo en todos tus dispositivos. Tus datos son privados: solo tú puedes verlos.</p>
+  <button class="btn pri" id="loginBtn" style="width:100%;margin-top:18px;padding:12px">Entrar con Google</button>
+  <button class="btn" id="skipBtn" style="width:100%;margin-top:8px">Usar sin cuenta (solo en este dispositivo)</button>
+  <p class="sync" id="loginErr" style="margin-top:10px"></p>
+</div></div>
+
+<script>
+/* ---------- Contenido ---------- */
+const CATS={
+  grow:{name:"Crecimiento",emoji:"🌱"},
+  health:{name:"Salud",emoji:"💚"},
+  couple:{name:"Pareja",emoji:"💞"},
+  learn:{name:"Aprendizaje",emoji:"📚"},
+  other:{name:"Otros",emoji:"⭐"}
+};
+const IDEAS={
+grow:[
+ ["Diario de gratitud","Escribe 3 cosas concretas por las que agradeces hoy y por qué.",10],
+ ["Lectura con propósito","Lee 20 páginas de un libro de no ficción y anota una idea útil.",25],
+ ["Aprender de un error","Escribe qué salió mal recientemente, qué aprendiste y qué harás distinto.",15],
+ ["Meta de la semana","Define una meta pequeña para esta semana y los 3 primeros pasos.",15],
+ ["Habilidad nueva","Dedica 20 minutos a practicar algo nuevo: dibujo, guitarra, código, cocina…",20],
+ ["Podcast o charla educativa","Escucha una charla sobre un tema que no conozcas y resume 2 ideas.",30],
+ ["Carta a tu yo futuro","Escribe a quién quieres ser dentro de un año y qué te gustaría haber logrado.",15],
+ ["Práctica de idioma","10 minutos de vocabulario o conversación en el idioma que estés aprendiendo.",10],
+ ["Revisión de finanzas","Revisa tus gastos de la semana y elige un ajuste pequeño.",15],
+ ["Ordenar un espacio","Despeja un cajón o tu escritorio. El orden externo ayuda al interno.",15],
+ ["Pequeño reto de valentía","Haz algo que te incomode un poco: una llamada pendiente, pedir ayuda, opinar.",10],
+ ["Mapa de valores","Elige tus 5 valores principales y revisa si tu semana los reflejó.",15]
+],
+health:[
+ ["Caminata de 30 minutos","Camina a paso ligero, idealmente al aire libre.",30],
+ ["Hidratación","Mantén una botella cerca y toma agua a lo largo del día.",5],
+ ["Estiramientos","10 minutos de cuello, espalda, caderas y piernas.",10],
+ ["Respiración 4-7-8","Inhala 4 s, retén 7 s, exhala 8 s. Repite 4 ciclos para calmarte.",5],
+ ["Fuerza con tu peso","Sentadillas, lagartijas y plancha: 3 rondas sencillas.",15],
+ ["Luz de la mañana","Sal 10 minutos a la luz natural poco después de despertar.",10],
+ ["Plato equilibrado","Que la mitad de tu plato sean verduras en una comida de hoy.",0],
+ ["Desconexión nocturna","Sin pantallas la última hora antes de dormir.",60],
+ ["Meditación breve","10 minutos sentado, atendiendo a tu respiración.",10],
+ ["Pausas activas","Levántate y muévete 2 minutos cada hora de trabajo.",10],
+ ["Hora de dormir fija","Acuéstate a la misma hora para un sueño de 7–8 horas.",0],
+ ["Cocina casera","Prepara una comida con ingredientes frescos en lugar de comida procesada.",40]
+],
+couple:[
+ ["Paseo sin celulares","Caminen juntos dejando los teléfonos en casa o en silencio.",30],
+ ["Cocinar algo nuevo","Elijan una receta que ninguno haya hecho y prepárenla en equipo.",60],
+ ["Masaje relajante","Turnense 10 minutos cada uno: manos, hombros o espalda.",20],
+ ["Spa en casa","Velas, música suave, mascarillas y un baño o ducha tibia.",45],
+ ["Yoga o estiramientos juntos","Sigan una rutina suave de yoga para principiantes.",20],
+ ["Noche de juegos","Un juego de mesa o de cartas, con apuesta divertida.",45],
+ ["Picnic","En un parque, en el balcón o en la sala sobre una manta.",60],
+ ["Leer en voz alta","Uno lee un capítulo de un libro mientras el otro se relaja.",20],
+ ["Planear un sueño","Hablen de un viaje o proyecto que quieran hacer y den un primer paso.",30],
+ ["Bailar","Pongan su canción favorita y bailen en la cocina.",10],
+ ["Mirar las estrellas","Busquen un lugar oscuro, una manta y miren el cielo juntos.",30],
+ ["Nota de aprecio","Escríbanse una nota con 3 cosas que admiran del otro.",10],
+ ["Conversación profunda","Usen las preguntas de abajo para conocerse un poco más.",30],
+ ["Meditación en pareja","Siéntense espalda con espalda y respiren al mismo ritmo 10 minutos.",10]
+]};
+const TALK=[
+ "¿Qué momento de este año te ha hecho más feliz?",
+ "¿Qué te gustaría que hiciéramos más seguido?",
+ "¿Cuál es un sueño que aún no me has contado?",
+ "¿Qué aprendiste de tu familia que quieres conservar?",
+ "¿Cuándo te sentiste más apoyado(a) por mí?",
+ "Si pudiéramos vivir un año en otro país, ¿cuál sería?",
+ "¿Qué te preocupa últimamente y cómo puedo ayudarte?",
+ "¿Qué recuerdo nuestro te hace sonreír siempre?",
+ "¿Qué hábito te gustaría que construyéramos juntos?",
+ "¿Cómo te imaginas un domingo perfecto?",
+ "¿Qué es algo que admiras de ti mismo(a)?",
+ "¿Qué significa para ti sentirte en casa?"
+];
+const LEARN={
+"Historia":{e:"🏛️",t:[
+ ["La imprenta de Gutenberg","Hacia 1450, en Maguncia, Johannes Gutenberg combinó tipos móviles de metal con una prensa. Los libros se abarataron y las ideas comenzaron a circular mucho más rápido, lo que impulsó la Reforma protestante y, más tarde, la revolución científica.","¿Qué invento de nuestra época crees que tiene un impacto comparable?"],
+ ["La Revolución Francesa","Comenzó en 1789 con una crisis financiera y social que llevó a la toma de la Bastilla. Acabó con la monarquía absoluta y difundió ideas como la soberanía popular y los derechos del ciudadano, aunque también vivió etapas muy violentas como el Terror.","¿Por qué crees que los ideales de 'libertad, igualdad, fraternidad' siguen siendo tan citados?"],
+ ["Los mayas y el cero","La civilización maya desarrolló un sistema numérico en base 20 que incluía un símbolo para el cero, uno de los usos más antiguos de este concepto en el mundo. Lo usaban en su calendario de Cuenta Larga y en cálculos astronómicos muy precisos.","¿Cómo sería hacer matemáticas sin el cero?"],
+ ["La Revolución Industrial","Empezó en Gran Bretaña a finales del siglo XVIII. La máquina de vapor, las fábricas textiles y el ferrocarril transformaron el trabajo y las ciudades, y trajeron crecimiento económico, pero también duras condiciones laborales.","¿Qué paralelos ves entre aquella revolución y la actual revolución digital?"],
+ ["La caída del Muro de Berlín","El muro dividió Berlín de 1961 a 1989. Su apertura el 9 de noviembre de 1989 simbolizó el fin de la Guerra Fría en Europa y abrió paso a la reunificación alemana en 1990.","¿Qué 'muros' (físicos o no) existen hoy entre las personas?"]
+]},
+"Ciencia":{e:"🔬",t:[
+ ["La fotosíntesis","Las plantas usan la luz solar, el agua y el dióxido de carbono para fabricar glucosa, y liberan oxígeno. Ocurre en los cloroplastos gracias a la clorofila, que es la que les da el color verde.","¿Por qué crees que la fotosíntesis es clave para casi toda la vida del planeta?"],
+ ["El ADN","El ADN es una molécula en forma de doble hélice que guarda las instrucciones para construir y mantener un ser vivo. Su estructura fue descrita en 1953 por Watson y Crick, con aportes decisivos de las imágenes de Rosalind Franklin.","¿Qué te parece que compartimos gran parte de nuestro ADN con otros animales?"],
+ ["La evolución por selección natural","Charles Darwin propuso en 1859 que los individuos con rasgos mejor adaptados a su entorno tienden a sobrevivir y reproducirse más, y así las especies cambian a lo largo de generaciones.","¿Qué ejemplo de adaptación en la naturaleza te sorprende?"],
+ ["La tabla periódica","En 1869 Dmitri Mendeléyev ordenó los elementos por sus propiedades y dejó huecos para elementos aún no descubiertos, que luego se encontraron. Hoy se ordenan por número atómico: la cantidad de protones.","¿Cuántos elementos de la tabla crees que usas en un día normal?"],
+ ["¿Por qué el cielo es azul?","La luz del Sol contiene todos los colores. Al atravesar la atmósfera, la luz azul (de onda corta) se dispersa mucho más que la roja: es la dispersión de Rayleigh. Al atardecer la luz recorre más aire y predominan los tonos rojos y naranjas.","¿De qué color sería el cielo en un planeta sin atmósfera?"]
+]},
+"Geografía":{e:"🌎",t:[
+ ["Placas tectónicas","La corteza terrestre está dividida en grandes placas que se mueven unos centímetros al año. Sus choques y separaciones forman montañas, volcanes y provocan terremotos; así se formaron los Andes y el Himalaya.","¿Sabes sobre qué placa vives y cuál es la más cercana?"],
+ ["El río Amazonas","Es el río con mayor caudal del mundo: aporta cerca de una quinta parte del agua dulce que llega a los océanos. Su cuenca alberga la selva tropical más grande del planeta.","¿Por qué crees que la Amazonía importa al clima de todo el mundo?"],
+ ["Corrientes oceánicas","Los océanos tienen 'ríos' internos, como la Corriente del Golfo, que transporta agua cálida desde el Caribe hacia el Atlántico norte y suaviza el clima de Europa occidental.","¿Cómo influye el mar en el clima de donde vives?"],
+ ["Los husos horarios","La Tierra gira 360° en 24 horas, así que cada 15° de longitud equivale aproximadamente a una hora. Por eso el mundo se divide en husos horarios, aunque sus fronteras siguen límites políticos.","¿Qué hora es ahora mismo al otro lado del mundo?"],
+ ["El desierto más grande","Un desierto se define por la poca precipitación, no por el calor. Por eso la Antártida es el desierto más grande del mundo; el Sahara es el desierto cálido más grande.","¿Te sorprende? ¿Qué otros 'desiertos fríos' conoces?"]
+]},
+"Arte":{e:"🎨",t:[
+ ["La perspectiva del Renacimiento","En la Florencia del siglo XV, Filippo Brunelleschi demostró la perspectiva lineal: líneas que convergen en un punto de fuga para crear profundidad. Cambió para siempre la pintura occidental.","Observa una calle o un pasillo: ¿dónde está el punto de fuga?"],
+ ["El Impresionismo","Surgió en Francia en la década de 1870. Pintores como Monet, Renoir y Morisot pintaban al aire libre con pinceladas sueltas para captar la luz y el instante. El nombre nació de una burla de un crítico.","¿Qué momento de luz del día te gustaría 'capturar'?"],
+ ["El muralismo mexicano","Tras la Revolución Mexicana, Diego Rivera, José Clemente Orozco y David Alfaro Siqueiros pintaron grandes murales en edificios públicos para contar la historia del pueblo y hacer el arte accesible a todos.","¿Por qué crees que eligieron muros públicos y no lienzos?"],
+ ["Teoría del color","Los colores complementarios están opuestos en el círculo cromático (azul–naranja, rojo–verde, amarillo–violeta). Juntos generan máximo contraste; por eso se usan tanto en carteles y cine.","Busca a tu alrededor un par de colores complementarios."],
+ ["El claroscuro de Caravaggio","En el Barroco, Caravaggio usó contrastes extremos de luz y sombra (tenebrismo) para dar dramatismo a sus escenas, como si un foco iluminara a los personajes.","¿Qué emociones te provoca una imagen con mucha sombra?"]
+]},
+"Filosofía":{e:"🤔",t:[
+ ["Sócrates y las preguntas","Sócrates no escribía; dialogaba. Con su método de preguntas (la mayéutica) ayudaba a otros a descubrir sus contradicciones y llegar a ideas más claras. Se le atribuye: 'Solo sé que no sé nada'.","¿Qué creencia tuya nunca has cuestionado?"],
+ ["El estoicismo","Epicteto enseñaba a distinguir entre lo que depende de nosotros (juicios, acciones) y lo que no (opiniones ajenas, el clima). Enfocarse en lo primero trae serenidad.","¿Qué te preocupa hoy que no depende de ti?"],
+ ["Pienso, luego existo","René Descartes decidió dudar de todo lo que pudiera. Concluyó que de lo único que no podía dudar era de que estaba pensando: por lo tanto, existía.","¿De qué cosas estás absolutamente seguro(a)?"],
+ ["El utilitarismo","Jeremy Bentham y John Stuart Mill propusieron que la acción correcta es la que produce el mayor bienestar para el mayor número de personas. Es una ética centrada en las consecuencias.","¿Ves algún problema en juzgar las acciones solo por sus resultados?"],
+ ["El existencialismo","Para Jean-Paul Sartre, 'la existencia precede a la esencia': no nacemos con un propósito fijo, lo construimos con nuestras decisiones, y somos responsables de ellas.","¿Qué decisión reciente dice más de quién eres?"]
+]},
+"Economía":{e:"💰",t:[
+ ["El interés compuesto","Es ganar intereses sobre los intereses. Ahorrar poco pero durante mucho tiempo puede crecer más que ahorrar mucho durante poco. La 'regla del 72' estima los años para duplicar: 72 ÷ tasa anual.","Con un 6% anual, ¿en cuántos años se duplica tu dinero?"],
+ ["Oferta y demanda","Cuando algo escasea y mucha gente lo quiere, su precio sube; cuando abunda y pocos lo quieren, baja. El precio de equilibrio está donde ambas fuerzas se encuentran.","¿Qué producto has visto cambiar de precio por esto?"],
+ ["La inflación","Es el aumento general de los precios con el tiempo, que reduce el poder de compra del dinero. Los bancos centrales suelen subir las tasas de interés para contenerla.","¿Qué compras te muestran más claramente la inflación?"],
+ ["El costo de oportunidad","Cada elección implica renunciar a la mejor alternativa. El costo de ver una serie dos horas incluye todo lo que podrías haber hecho en ese tiempo.","¿Cuál fue el costo de oportunidad de tu última gran decisión?"],
+ ["La diversificación","'No poner todos los huevos en la misma canasta': repartir inversiones en distintos activos reduce el riesgo de que un solo mal resultado te afecte mucho.","¿Dónde más en la vida aplica la diversificación?"]
+]},
+"Tecnología":{e:"💻",t:[
+ ["Cómo viaja la información en internet","Lo que envías se divide en pequeños paquetes que viajan por rutas distintas y se rearman en el destino. Los protocolos TCP/IP son las reglas comunes que hacen posible que todo se entienda.","¿Cuántos países crees que atraviesa un mensaje tuyo?"],
+ ["¿Qué es un algoritmo?","Es una serie de pasos precisos para resolver un problema, como una receta de cocina. Los buscadores, mapas y redes sociales usan algoritmos para decidir qué mostrarte.","Escribe el 'algoritmo' de tu rutina de la mañana."],
+ ["Aprendizaje automático","En lugar de programar cada regla, se le dan muchos ejemplos a un sistema para que encuentre patrones por sí mismo. Así funcionan el reconocimiento de voz, los traductores y los asistentes de IA.","¿Qué tarea de tu día podría ayudarte a hacer una IA?"],
+ ["Contraseñas y verificación en dos pasos","Una contraseña larga (una frase de varias palabras) es más difícil de adivinar que una corta con símbolos. Añadir verificación en dos pasos protege tu cuenta aunque roben tu contraseña.","¿Tienes activada la verificación en dos pasos en tu correo?"],
+ ["El sistema binario","Las computadoras trabajan con dos estados: 0 y 1. Combinando bits se representa todo: el número 5 es 101, y cada letra o color es una combinación de bits.","¿Cómo se escribe tu edad en binario?"]
+]},
+"Psicología":{e:"🧠",t:[
+ ["El sesgo de confirmación","Tendemos a buscar y recordar la información que confirma lo que ya creemos, e ignorar la que lo contradice. Reconocerlo es el primer paso para pensar con más claridad.","¿Sobre qué tema podrías buscar hoy una opinión contraria?"],
+ ["Cómo se forman los hábitos","Un hábito sigue un ciclo: señal, rutina y recompensa. Para crear uno nuevo, hazlo fácil, ligado a una señal clara y con una pequeña recompensa inmediata.","¿Qué señal podrías usar para un hábito que quieres empezar?"],
+ ["Mentalidad de crecimiento","La psicóloga Carol Dweck describe dos mentalidades: la fija (las habilidades son innatas) y la de crecimiento (se desarrollan con esfuerzo y práctica). La segunda favorece el aprendizaje ante los errores.","¿En qué área de tu vida tienes mentalidad fija?"],
+ ["Inteligencia emocional","Es la capacidad de reconocer, entender y gestionar tus emociones y las de los demás. Nombrar con precisión lo que sientes ('frustrado' en vez de 'mal') ya ayuda a regularlo.","¿Qué emoción sentiste más hoy? Intenta nombrarla con precisión."],
+ ["El efecto Dunning-Kruger","Las personas con poca experiencia en un tema tienden a sobrestimar su habilidad, mientras que los expertos suelen ser más conscientes de lo que no saben.","¿En qué tema te diste cuenta de que sabías menos de lo que creías?"]
+]},
+"Literatura":{e:"📖",t:[
+ ["Don Quijote de la Mancha","Miguel de Cervantes publicó la primera parte en 1605 y la segunda en 1615. Se considera la primera novela moderna: un hidalgo que, de tanto leer libros de caballerías, decide convertirse en caballero andante.","¿Hay algo que te apasione tanto como al Quijote sus libros?"],
+ ["El realismo mágico","Corriente latinoamericana que narra hechos extraordinarios como si fueran cotidianos. Su obra más famosa es 'Cien años de soledad' (1967) de Gabriel García Márquez, ambientada en Macondo.","¿Qué evento de tu vida contarías en clave de realismo mágico?"],
+ ["El viaje del héroe","Joseph Campbell observó que muchos mitos siguen una estructura similar: llamada a la aventura, pruebas, crisis, transformación y regreso. Muchas películas actuales la usan.","¿Qué etapa del viaje del héroe estás viviendo tú ahora?"],
+ ["Sor Juana Inés de la Cruz","Poeta y monja novohispana del siglo XVII, una de las grandes voces del Barroco en español. Defendió el derecho de las mujeres al conocimiento en su famosa 'Respuesta a sor Filotea'.","¿Por qué crees que su defensa del estudio fue tan valiente en su época?"],
+ ["El haiku","Forma poética japonesa breve, tradicionalmente de 17 sílabas en tres versos (5-7-5), que captura un instante de la naturaleza. Matsuo Bashō es su maestro más conocido.","Escribe tu propio haiku sobre algo que viste hoy."]
+]},
+"Cuerpo humano":{e:"🫀",t:[
+ ["Los ciclos del sueño","Dormimos en ciclos de unos 90 minutos que alternan sueño ligero, profundo y REM. El sueño profundo repara el cuerpo; el REM ayuda a la memoria y las emociones.","¿Te despiertas descansado(a)? ¿Cuántas horas duermes en promedio?"],
+ ["La microbiota intestinal","En el intestino viven billones de microorganismos que ayudan a digerir, producen vitaminas y se relacionan con el sistema inmune. La fibra de frutas, verduras y legumbres los alimenta.","¿Qué alimento con fibra podrías sumar esta semana?"],
+ ["Cómo trabaja el corazón","El corazón late unas 100 000 veces al día. Tiene cuatro cavidades: el lado derecho envía sangre a los pulmones para oxigenarla y el izquierdo la impulsa al resto del cuerpo.","¿Cuál es tu frecuencia cardíaca en reposo? Mídela 60 segundos."],
+ ["El sistema inmune","Tiene una defensa innata (rápida y general) y una adaptativa (más lenta pero específica, con memoria). Las vacunas entrenan a la adaptativa sin que tengas que enfermarte.","¿Qué hábitos crees que fortalecen tus defensas?"],
+ ["El cerebro y el ejercicio","La actividad física aumenta el flujo de sangre al cerebro y se asocia con mejor memoria, ánimo y concentración. Incluso una caminata corta puede mejorar el estado de ánimo.","¿Has notado cómo cambia tu ánimo después de moverte?"]
+]}
+};
+
+/* ---------- Estado ---------- */
+let state={log:[],learned:{},goals:[],refl:{},habits:[]};
+let db=null, docRef=null, saveTimer=null;
+const LS="crecer.v1"; let LSKEY=LS;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const dkey=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const TODAY=dkey(new Date());
+function seed(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1800)}
+
+function loadLocal(){try{const s=JSON.parse(localStorage.getItem(LSKEY));if(s&&s.log)state=Object.assign({goals:[],refl:{},habits:[]},s)}catch(e){}}
+function saveLocal(){try{localStorage.setItem(LSKEY,JSON.stringify(state))}catch(e){}}
+function save(){
+  saveLocal();
+  if(!docRef)return;
+  clearTimeout(saveTimer);
+  $("#sync").textContent="Guardando…";
+  saveTimer=setTimeout(async()=>{
+    try{await docRef.set({log:state.log,learned:state.learned,plan:state.plan||{},goals:state.goals||[],refl:state.refl||{},habits:state.habits||[]});$("#sync").textContent="☁️ Guardado"}
+    catch(e){$("#sync").textContent="Guardado en este dispositivo"}
+  },700);
+}
+async function initCloud(){
+  try{
+    if(!window.claude||!claude.use)return;
+    const [d,u]=await Promise.all([claude.use("db"),claude.use("user")]);
+    if(!d||!u)return;
+    const id=await u.id(); if(!id)return;
+    db=d; docRef=db.collection("data/users/"+id).doc("estado");
+    const timer=setTimeout(()=>{$("#sync").textContent="Guardado en este dispositivo"},10000);
+    const r=await docRef.get(); clearTimeout(timer);
+    let data=r&&typeof r.data==="function"?r.data():r;
+    if(data&&data.data&&data.data.log)data=data.data;
+    if(data&&Array.isArray(data.log)){
+      // combinar con lo local por si se registró algo sin conexión
+      const ids=new Set(data.log.map(x=>x.id));
+      const extra=state.log.filter(x=>!ids.has(x.id));
+      const gids=new Set((data.goals||[]).map(g=>g.id));
+      const gextra=(state.goals||[]).filter(g=>!gids.has(g.id));
+      state={log:data.log.concat(extra),learned:Object.assign({},data.learned||{},state.learned),plan:data.plan||state.plan||{},
+        goals:(data.goals||[]).concat(gextra),refl:Object.assign({},state.refl||{},data.refl||{}),
+        habits:mergeById(data.habits||[],state.habits||[])};
+      if((state.habits||[]).length>(data.habits||[]).length)extra.push(1);
+      if(gextra.length)extra.push(1);
+      if(extra.length)save(); else saveLocal();
+    }else if(state.log.length){save()}
+    $("#sync").textContent="☁️ Sincronizado";
+    renderAll();
+  }catch(e){$("#sync").textContent="Guardado en este dispositivo"}
+}
+
+/* ---------- Acciones ---------- */
+function addLog(o){
+  state.log.unshift(Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),date:TODAY,min:0,mood:"😊",note:""},o));
+  save();renderAll();toast("¡Registrado! "+(CATS[o.cat]?.emoji||""));
+}
+function mergeById(a,b){const ids=new Set(a.map(x=>x.id));return a.concat(b.filter(x=>!ids.has(x.id)))}
+function doneToday(title){return state.log.some(l=>l.date===TODAY&&l.title===title)}
+function topicKey(a,i){return a+"::"+i}
+function markLearned(a,i){
+  const k=topicKey(a,i); if(state.learned[k])return;
+  state.learned[k]=TODAY;
+  addLog({cat:"learn",title:"Aprendí: "+LEARN[a].t[i][0],min:10,note:a});
+}
+
+/* ---------- Plan de hoy ---------- */
+function getPlan(){
+  state.plan=state.plan||{};
+  if(state.plan.date!==TODAY){
+    const s=seed(TODAY);
+    state.plan={date:TODAY,grow:s%IDEAS.grow.length,health:(s>>4)%IDEAS.health.length,couple:(s>>8)%IDEAS.couple.length,learn:pickLearn()};
+  }
+  return state.plan;
+}
+function shuffleCat(c){
+  const p=getPlan();
+  if(c==="learn"){p.learn=pickLearn(true)}
+  else{let n;do{n=Math.floor(Math.random()*IDEAS[c].length)}while(n===p[c]&&IDEAS[c].length>1);p[c]=n}
+  save();renderPlan();
+}
+function ideaCard(c,item,opts={}){
+  const [t,d,m]=item; const done=doneToday(t);
+  return `<div class="card ${c}"><div class="row"><span class="tag">${CATS[c].emoji} ${CATS[c].name}</span>${m?`<span class="sync">~${m} min</span>`:""}</div>
+  <div class="title">${esc(t)}</div><p class="desc">${esc(d)}</p>
+  <div class="btns"><button class="btn ${done?"done":"pri"}" data-do="${c}|${esc(t)}|${m}" ${done?"disabled":""}>${done?"✓ Hecho":"Marcar como hecho"}</button>
+  ${opts.shuffle?`<button class="btn" data-shuffle="${c}">↻ Otra</button>`:""}</div></div>`;
+}
+function renderPlan(){
+  const p=getPlan();
+  let h=ideaCard("grow",IDEAS.grow[p.grow],{shuffle:1})+ideaCard("health",IDEAS.health[p.health],{shuffle:1})+ideaCard("couple",IDEAS.couple[p.couple],{shuffle:1});
+  const [a,i]=p.learn; const tp=LEARN[a].t[i]; const ld=!!state.learned[topicKey(a,i)];
+  h+=`<div class="card learn"><span class="tag">📚 Aprende hoy · ${esc(a)}</span>
+  <div class="title">${LEARN[a].e} ${esc(tp[0])}</div><p class="desc">${esc(tp[1].slice(0,110))}…</p>
+  <div class="btns"><button class="btn pri" data-open="${esc(a)}|${i}">${ld?"✓ Repasar":"Leer lección"}</button><button class="btn" data-shuffle="learn">↻ Otro tema</button></div></div>`;
+  $("#plan").innerHTML=h;
+}
+
+/* ---------- Aprender ---------- */
+function areaStats(a){const n=LEARN[a].t.length;let d=0,last="";LEARN[a].t.forEach((_,i)=>{const v=state.learned[topicKey(a,i)];if(v){d++;if(v>last)last=v}});return{n,d,last}}
+function pickLearn(rand){
+  const areas=Object.keys(LEARN);
+  let cands=areas.filter(a=>areaStats(a).d<areaStats(a).n);
+  if(!cands.length)cands=areas;
+  if(!rand){
+    // el área menos explorada y menos reciente, para equilibrar tus conocimientos
+    cands.sort((x,y)=>{const A=areaStats(x),B=areaStats(y);return (A.d/A.n)-(B.d/B.n)||A.last.localeCompare(B.last)||(seed(TODAY+x)%7)-(seed(TODAY+y)%7)});
+  }
+  const a=rand?cands[Math.floor(Math.random()*cands.length)]:cands[0];
+  const pend=LEARN[a].t.map((_,i)=>i).filter(i=>!state.learned[topicKey(a,i)]);
+  const pool=pend.length?pend:LEARN[a].t.map((_,i)=>i);
+  return [a,rand?pool[Math.floor(Math.random()*pool.length)]:pool[0]];
+}
+function showLesson(a,i,why){
+  const tp=LEARN[a].t[i]; const ld=!!state.learned[topicKey(a,i)];
+  $("#lesson").innerHTML=`<div class="card learn lesson">
+   <span class="tag">${LEARN[a].e} ${esc(a)}</span>
+   ${why?`<p class="sync" style="margin:6px 0 0">${why}</p>`:""}
+   <h3>${esc(tp[0])}</h3><p style="margin:0">${esc(tp[1])}</p>
+   <div class="q">💭 <b>Para reflexionar:</b> ${esc(tp[2])}</div>
+   <div class="btns"><button class="btn ${ld?"done":"pri"}" data-learn="${esc(a)}|${i}" ${ld?"disabled":""}>${ld?"✓ Aprendido":"Lo aprendí"}</button>
+   ${i<LEARN[a].t.length-1?`<button class="btn" data-lesson="${esc(a)}|${i+1}">Siguiente tema →</button>`:""}</div></div>`;
+  $("#lesson").scrollIntoView({behavior:"smooth",block:"start"});
+}
+let openArea=null;
+function renderAreas(){
+  $("#areas").innerHTML=Object.keys(LEARN).map(a=>{const s=areaStats(a);
+    return `<button class="card area" data-area="${esc(a)}" style="margin:0;${openArea===a?"outline:2px solid var(--learn)":""}">
+    <div><b>${LEARN[a].e} ${esc(a)}</b></div><small>${s.d}/${s.n} temas</small>
+    <div class="progress"><i style="width:${s.d/s.n*100}%"></i></div></button>`}).join("");
+  if(openArea){
+    $("#areaTopics").innerHTML=`<h2>${LEARN[openArea].e} ${esc(openArea)}</h2>`+LEARN[openArea].t.map((tp,i)=>{
+      const ld=!!state.learned[topicKey(openArea,i)];
+      return `<div class="card row" style="cursor:pointer" data-lesson="${esc(openArea)}|${i}"><span>${ld?"✅":"⚪️"} ${esc(tp[0])}</span><span class="sync">Leer →</span></div>`}).join("");
+  }else $("#areaTopics").innerHTML="";
+}
+
+/* ---------- Ideas ---------- */
+let ideaCat="grow";
+function renderIdeas(){
+  $("#catChips").innerHTML=["grow","health","couple"].map(c=>`<button class="chip ${c===ideaCat?"on":""}" data-cat="${c}">${CATS[c].emoji} ${CATS[c].name}</button>`).join("");
+  $("#ideas").innerHTML=IDEAS[ideaCat].map(it=>ideaCard(ideaCat,it)).join("");
+  $("#talkBox").innerHTML=ideaCat==="couple"?`<h2>Preguntas para conversar</h2><div class="card couple"><p class="title" id="talkQ" style="font-size:18px">${TALK[seed(TODAY)%TALK.length]}</p><div class="btns"><button class="btn" id="nextTalk">↻ Otra pregunta</button></div></div>`:"";
+}
+
+/* ---------- Registro ---------- */
+function weekDays(){const out=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);out.push(d)}return out}
+function renderStats(){
+  const days=new Set(state.log.map(l=>l.date));
+  let s=0;const d=new Date();if(!days.has(dkey(d)))d.setDate(d.getDate()-1);
+  while(days.has(dkey(d))){s++;d.setDate(d.getDate()-1)}
+  $("#sStreak").textContent=s;
+  $("#sToday").textContent=state.log.filter(l=>l.date===TODAY).length;
+  $("#sLearned").textContent=Object.keys(state.learned).length;
+  const wd=["D","L","M","X","J","V","S"];
+  $("#week").innerHTML=weekDays().map(x=>{const k=dkey(x);const n=state.log.filter(l=>l.date===k).length;
+    return `<div><i class="${n?"on":""}" style="${n?`opacity:${Math.min(1,.35+n*.2)}`:""}"></i>${wd[x.getDay()]}${k===TODAY?"·":""}</div>`}).join("");
+}
+function renderLog(){
+  const keys=new Set(weekDays().map(dkey));
+  const tot={grow:0,health:0,couple:0,learn:0,other:0},cnt={grow:0,health:0,couple:0,learn:0};
+  state.log.forEach(l=>{if(keys.has(l.date)&&tot[l.cat]!=null){tot[l.cat]+=+l.min||0;cnt[l.cat]++}});
+  const max=Math.max(1,...Object.values(tot));
+  const col={grow:"var(--grow)",health:"var(--health)",couple:"var(--couple)",learn:"var(--learn)",other:"var(--other)"};
+  $("#bars").innerHTML=Object.keys(tot).map(c=>`<div class="b"><span>${CATS[c].emoji} ${CATS[c].name}</span><div class="track"><i style="width:${tot[c]/max*100}%;background:${col[c]}"></i></div><span class="sync">${tot[c]} min</span></div>`).join("")
+   +(()=>{const low=Object.keys(cnt).sort((a,b)=>cnt[a]-cnt[b])[0];return state.log.length?`<p class="desc" style="margin-top:10px">💡 Esta semana le has dedicado menos tiempo a <b>${CATS[low].name.toLowerCase()}</b>. ¿Qué tal una actividad de esa área hoy?</p>`:""})();
+  if(!state.log.length){$("#history").innerHTML=`<div class="empty">Aún no hay actividades. Empieza con el plan de hoy ☀️</div>`;return}
+  const by={};state.log.forEach(l=>(by[l.date]=by[l.date]||[]).push(l));
+  $("#history").innerHTML=Object.keys(by).sort().reverse().slice(0,30).map(k=>{
+    const dt=new Date(k+"T12:00:00");
+    const lbl=k===TODAY?"Hoy":dt.toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"});
+    const a=analyzeDay(k);
+    return `<div class="day">${lbl} · <span style="color:${ringColor(a.score)}">${a.score}/100 ${a.label}</span></div><p class="desc" style="margin:0 0 8px">${esc(a.msgs.slice(0,2).join(" "))}</p>`+by[k].map(l=>`<div class="card ${l.cat} log"><div>
+      <span class="tag">${CATS[l.cat]?.emoji||""} ${CATS[l.cat]?.name||""}</span>
+      <div class="title">${l.mood||""} ${esc(l.title)}</div>
+      <p class="desc">${l.min?l.min+" min":""}${l.note?" · "+esc(l.note):""}</p></div>
+      <button class="x" data-del="${l.id}" aria-label="Eliminar">×</button></div>`).join("")}).join("");
+}
+/* ---------- Semana ---------- */
+let wOffset=0;
+function weekStart(off){const d=new Date();const wd=(d.getDay()+6)%7;d.setDate(d.getDate()-wd+off*7);d.setHours(12,0,0,0);return d}
+function weekKeys(off){const s=weekStart(off);return Array.from({length:7},(_,i)=>{const d=new Date(s);d.setDate(s.getDate()+i);return dkey(d)})}
+const GOAL_IDEAS=["Caminar 3 veces 30 min","2 actividades en pareja","5 lecciones nuevas","Dormir 7 h al menos 5 noches","Leer 100 páginas","Meditar 4 días","1 cita sin celulares","Cocinar en casa 4 veces"];
+function renderWeek(){
+  const ks=weekKeys(wOffset),wk=ks[0],set=new Set(ks);
+  const f=k=>new Date(k+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"});
+  $("#wLabel").textContent=(wOffset===0?"Esta semana · ":"")+f(ks[0])+" – "+f(ks[6]);
+  $("#wNext").disabled=wOffset>=0;
+  const L=state.log.filter(l=>set.has(l.date));
+  const mins=L.reduce((a,l)=>a+(+l.min||0),0), days=new Set(L.map(l=>l.date)).size;
+  const learned=Object.values(state.learned).filter(d=>set.has(d)).length, couple=L.filter(l=>l.cat==="couple").length;
+  const cnt={grow:0,health:0,couple:0,learn:0};L.forEach(l=>{if(cnt[l.cat]!=null)cnt[l.cat]++});
+  const low=Object.keys(cnt).sort((a,b)=>cnt[a]-cnt[b])[0], high=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];
+  const moods={};L.forEach(l=>{if(l.mood)moods[l.mood]=(moods[l.mood]||0)+1});
+  const mood=Object.keys(moods).sort((a,b)=>moods[b]-moods[a])[0];
+  $("#wSummary").innerHTML=`<div class="kpis"><div><b>${L.length}</b><span>actividades</span></div><div><b>${days}/7</b><span>días activos</span></div>
+   <div><b>${Math.round(mins/6)/10} h</b><span>tiempo invertido</span></div><div><b>${couple}</b><span>en pareja 💞</span></div>
+   <div><b>${learned}</b><span>temas aprendidos</span></div><div><b>${mood||"—"}</b><span>ánimo más frecuente</span></div></div>`+
+   `<div style="margin:6px 0 12px">${ks.map(k=>{const a=analyzeDay(k);const d=new Date(k+"T12:00:00").toLocaleDateString("es-MX",{weekday:"short",day:"numeric"});
+     return `<div class="dayrow"><span>${d}</span><div class="progress" style="margin:0;height:10px"><i style="width:${a.score}%;background:${ringColor(a.score)}"></i></div><span class="sync">${k>TODAY?"—":a.score}</span></div>`}).join("")}</div>`+
+   (L.length?`<p class="desc">Tu fuerte fue <b>${CATS[high].name.toLowerCase()}</b>${cnt[low]<cnt[high]?`; la próxima semana dale más espacio a <b>${CATS[low].name.toLowerCase()}</b>`:""}.</p>`:`<p class="desc">Sin actividades registradas en esta semana.</p>`);
+  const G=(state.goals||[]).filter(g=>g.week===wk);
+  const done=G.filter(g=>g.done).length;
+  $("#wGoals").innerHTML=G.length?`<div class="card"><div class="row"><span class="desc">${done} de ${G.length} cumplidas</span></div><div class="progress"><i style="width:${done/G.length*100}%;background:var(--health)"></i></div></div>`+
+    G.map(g=>`<div class="card goal ${g.done?"done":""}"><input type="checkbox" data-goal="${g.id}" ${g.done?"checked":""}><span>${esc(g.text)}</span><button class="x" data-gdel="${g.id}" style="margin-left:auto;background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer">×</button></div>`).join("")
+    :`<div class="empty">Aún no hay metas para esta semana.</div>`;
+  $("#gSuggest").innerHTML=GOAL_IDEAS.filter(t=>!G.some(g=>g.text===t)).slice(0,5).map(t=>`<button type="button" class="chip" data-gadd="${esc(t)}">+ ${esc(t)}</button>`).join("");
+  const r=(state.refl||{})[wk]||{};
+  $("#rGood").value=r.good||"";$("#rImprove").value=r.improve||"";$("#rThanks").value=r.thanks||"";
+}
+function addGoal(text){state.goals=state.goals||[];state.goals.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),week:weekKeys(wOffset)[0],text,done:false});save();renderWeek();toast("Meta añadida 🎯")}
+
+/* ---------- Mis actividades ---------- */
+const DAYS_LBL={diario:"Todos los días",lv:"Lunes a viernes",fs:"Fines de semana"};
+function habitsFor(k){const wd=new Date(k+"T12:00:00").getDay();
+  return (state.habits||[]).filter(h=>(h.from||"")<=k&&(h.days==="diario"||(h.days==="lv"&&wd>0&&wd<6)||(h.days==="fs"&&(wd===0||wd===6))))}
+function renderHabits(){
+  const hs=habitsFor(TODAY);
+  $("#habits").innerHTML=hs.length?hs.map(x=>{const done=state.log.some(l=>l.date===TODAY&&l.habit===x.id);
+    return `<div class="card ${x.cat} goal ${done?"done":""}"><input type="checkbox" data-habit="${x.id}" ${done?"checked":""}><div><span class="title" style="margin:0">${esc(x.title)}</span><div class="sync">${CATS[x.cat].emoji} ${CATS[x.cat].name}${x.min?" · "+x.min+" min":""}</div></div></div>`}).join("")
+    :`<div class="empty" style="padding:12px">${(state.habits||[]).length?"Hoy no tienes actividades propias programadas.":"Agrega tus propias actividades (las que no están en la página) y márcalas cada día."}</div>`;
+  $("#habitList").innerHTML=(state.habits||[]).map(x=>`<div class="row" style="padding:6px 0;border-top:1px solid var(--line)"><span>${CATS[x.cat].emoji} ${esc(x.title)} <span class="sync">· ${DAYS_LBL[x.days]}${x.min?" · "+x.min+" min":""}</span></span><button class="x" data-hdel="${x.id}" style="background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer">×</button></div>`).join("");
+}
+
+/* ---------- Análisis diario ---------- */
+function shiftKey(k,n){const d=new Date(k+"T12:00:00");d.setDate(d.getDate()+n);return dkey(d)}
+function dayMins(k){return state.log.filter(l=>l.date===k).reduce((a,l)=>a+(+l.min||0),0)}
+function analyzeDay(k){
+  const L=state.log.filter(l=>l.date===k), mins=L.reduce((a,l)=>a+(+l.min||0),0);
+  const core=["grow","health","couple","learn"], cats=new Set(L.map(l=>l.cat));
+  const covered=core.filter(c=>cats.has(c)), missing=core.filter(c=>!cats.has(c));
+  const hs=habitsFor(k), hd=hs.filter(x=>L.some(l=>l.habit===x.id)).length;
+  const hPart=hs.length?hd/hs.length:Math.min(1,L.length/4);
+  const score=L.length?Math.round(covered.length/4*70+hPart*30):0;
+  const label=score>=85?"Excelente":score>=60?"Muy bien":score>=35?"Buen avance":score>0?"Buen comienzo":"Sin registros";
+  const msgs=[];
+  if(!L.length)msgs.push(k===TODAY?"Aún no registras nada hoy. Una sola actividad ya cuenta.":"No registraste actividades este día.");
+  else{
+    msgs.push(covered.length===4?"¡Día completo! Cubriste las cuatro áreas.":`Cubriste ${covered.length} de 4 áreas${missing.length?"; faltó "+missing.map(c=>CATS[c].name.toLowerCase()).join(", "):""}.`);
+    if(hs.length)msgs.push(`Cumpliste ${hd} de ${hs.length} de tus actividades propias.`);
+    const prev=[1,2,3,4,5,6,7].map(i=>dayMins(shiftKey(k,-i))), act=prev.filter(m=>m>0);
+    if(act.length){const avg=act.reduce((a,b)=>a+b,0)/act.length;
+      if(mins>avg*1.2)msgs.push(`Dedicaste ${mins} min, más que tu promedio reciente (${Math.round(avg)} min). 👏`);
+      else if(mins<avg*0.8)msgs.push(`Dedicaste ${mins} min, menos que tu promedio reciente (${Math.round(avg)} min).`);
+      else msgs.push(`Dedicaste ${mins} min, en línea con tu promedio.`);}
+    else if(mins)msgs.push(`Dedicaste ${mins} min a tu crecimiento.`);
+    const moods={};L.forEach(l=>{if(l.mood)moods[l.mood]=(moods[l.mood]||0)+1});
+    const m=Object.keys(moods).sort((a,b)=>moods[b]-moods[a])[0]; if(m)msgs.push("Ánimo predominante: "+m);
+    if(k===TODAY&&missing.length)msgs.push(`Sugerencia: una actividad rápida de ${CATS[missing[0]].name.toLowerCase()} completaría mejor tu día.`);
+  }
+  return {L,mins,score,label,msgs};
+}
+function ringColor(s){return s>=85?"var(--health)":s>=60?"var(--learn)":s>=35?"var(--grow)":"var(--couple)"}
+function renderTodayAnalysis(){
+  const a=analyzeDay(TODAY);
+  $("#todayAnalysis").innerHTML=`<div class="score"><div class="ring" style="background:conic-gradient(${ringColor(a.score)} ${a.score*3.6}deg,var(--line) 0)"><b>${a.score}</b></div>
+   <div><div class="title" style="margin:0">${a.label}</div><div class="sync">${a.L.length} actividades · ${a.mins} min</div></div></div>
+   <ul class="msgs">${a.msgs.map(m=>`<li>${esc(m)}</li>`).join("")}</ul>`;
+}
+
+/* ---------- Copia de seguridad ---------- */
+function backupText(){return JSON.stringify({app:"mi-dia-para-crecer",v:2,state})}
+function importData(txt){
+  try{const o=JSON.parse(txt);const s=o.state||o;if(!s||!Array.isArray(s.log))throw 0;
+    state.log=mergeById(state.log,s.log);state.goals=mergeById(state.goals||[],s.goals||[]);state.habits=mergeById(state.habits||[],s.habits||[]);
+    state.learned=Object.assign({},s.learned||{},state.learned);state.refl=Object.assign({},s.refl||{},state.refl);
+    state.log.sort((a,b)=>b.date.localeCompare(a.date));save();renderAll();toast("Datos importados ✅")}
+  catch(e){toast("Ese archivo no tiene datos válidos")}
+}
+
+async function exportFile(){
+  const name="mi-dia-para-crecer-"+TODAY+".json", txt=backupText();
+  try{
+    if(window.claude&&claude.use){const dl=await claude.use("downloads");
+      if(dl){await dl.save({filename:name,data:txt});toast("Archivo exportado");return}}
+    const b=new Blob([txt],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();toast("Archivo exportado");
+  }catch(e){toast("No se pudo descargar; usa 'Copiar datos'")}
+}
+function renderAll(){renderStats();renderPlan();renderHabits();renderTodayAnalysis();renderIdeas();renderAreas();renderLog();renderWeek()}
+
+/* ---------- Eventos ---------- */
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,[data-lesson]");if(!t)return;
+  if(t.dataset.v){document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b===t));
+    document.querySelectorAll("section").forEach(s=>s.classList.toggle("hidden",s.id!=="v-"+t.dataset.v));window.scrollTo(0,0);return}
+  if(t.dataset.do){const [c,title,m]=t.dataset.do.split("|");addLog({cat:c,title,min:+m||0});return}
+  if(t.dataset.shuffle){shuffleCat(t.dataset.shuffle);return}
+  if(t.dataset.cat){ideaCat=t.dataset.cat;renderIdeas();return}
+  if(t.dataset.open){const [a,i]=t.dataset.open.split("|");$('nav button[data-v="aprender"]').click();showLesson(a,+i,"Tema propuesto para hoy");return}
+  if(t.dataset.lesson){const [a,i]=t.dataset.lesson.split("|");showLesson(a,+i);return}
+  if(t.dataset.learn){const [a,i]=t.dataset.learn.split("|");markLearned(a,+i);showLesson(a,+i);return}
+  if(t.dataset.area){openArea=openArea===t.dataset.area?null:t.dataset.area;renderAreas();return}
+  if(t.dataset.del){state.log=state.log.filter(l=>l.id!==t.dataset.del);save();renderAll();toast("Eliminado");return}
+  if(t.id==="suggestLearn"){const [a,i]=pickLearn();showLesson(a,i,"Te lo sugiero porque es el área que menos has explorado: así equilibras tus conocimientos.");return}
+  if(t.id==="randomLearn"){const [a,i]=pickLearn(true);showLesson(a,i,"Tema sorpresa 🎲");return}
+  if(t.dataset.hdel){state.habits=state.habits.filter(x=>x.id!==t.dataset.hdel);save();renderAll();toast("Actividad eliminada");return}
+  if(t.id==="expBtn"){exportFile();return}
+  if(t.id==="copyBtn"){navigator.clipboard.writeText(backupText()).then(()=>toast("Datos copiados 📋"),()=>{$("#impText").value=backupText();$("#impText").select();toast("Cópialos del cuadro de texto")});return}
+  if(t.id==="impTextBtn"){if($("#impText").value.trim())importData($("#impText").value.trim());return}
+  if(t.id==="wPrev"){wOffset--;renderWeek();return}
+  if(t.id==="wNext"){if(wOffset<0)wOffset++;renderWeek();return}
+  if(t.dataset.gadd){addGoal(t.dataset.gadd);return}
+  if(t.dataset.gdel){state.goals=state.goals.filter(g=>g.id!==t.dataset.gdel);save();renderWeek();return}
+  if(t.id==="nextTalk"){const q=$("#talkQ");let n;do{n=TALK[Math.floor(Math.random()*TALK.length)]}while(n===q.textContent);q.textContent=n;return}
+});
+document.addEventListener("change",e=>{const hb=e.target.dataset&&e.target.dataset.habit;
+  if(hb){const x=state.habits.find(z=>z.id===hb);if(!x)return;
+    if(e.target.checked)addLog({cat:x.cat,title:x.title,min:x.min||0,habit:x.id});
+    else{state.log=state.log.filter(l=>!(l.date===TODAY&&l.habit===hb));save();renderAll()}return}});
+document.addEventListener("change",e=>{const g=e.target.dataset&&e.target.dataset.goal;if(!g)return;
+  const it=state.goals.find(x=>x.id===g);if(it){it.done=e.target.checked;save();renderWeek();if(it.done)toast("¡Meta cumplida! 🎉")}});
+$("#habitForm").addEventListener("submit",e=>{e.preventDefault();state.habits=state.habits||[];
+  state.habits.push({id:"h"+Date.now().toString(36),title:$("#hTitle").value.trim(),cat:$("#hCat").value,min:+$("#hMin").value||0,days:$("#hDays").value,from:TODAY});
+  $("#hTitle").value="";save();renderAll();toast("Actividad agregada ⭐")});
+$("#impFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>importData(r.result);r.readAsText(f);e.target.value=""});
+$("#goalForm").addEventListener("submit",e=>{e.preventDefault();const v=$("#gText").value.trim();if(v){addGoal(v);$("#gText").value=""}});
+$("#reflForm").addEventListener("submit",e=>{e.preventDefault();state.refl=state.refl||{};
+  state.refl[weekKeys(wOffset)[0]]={good:$("#rGood").value.trim(),improve:$("#rImprove").value.trim(),thanks:$("#rThanks").value.trim()};save();toast("Reflexión guardada ✍️")});
+$("#addForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  addLog({title:$("#fTitle").value.trim(),cat:$("#fCat").value,min:+$("#fMin").value||0,date:$("#fDate").value||TODAY,mood:$("#fMood").value,note:$("#fNote").value.trim()});
+  $("#fTitle").value="";$("#fNote").value="";
+});
+
+/* ---------- Inicio ---------- */
+$("#today").textContent=new Date().toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"}).replace(/^./,c=>c.toUpperCase());
+$("#fDate").value=TODAY;
+loadLocal();renderAll();
+setTimeout(()=>{if(!window.FB_READY)$("#sync").textContent="Guardado en este dispositivo"},8000);
+</script>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithRedirect,getRedirectResult,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,getFirestore,doc,getDoc,setDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyB_VbY64pzzV7zfCh1QYV75za0taLiKNdM",
+  authDomain:"mi-dia-a-dia1.firebaseapp.com",
+  projectId:"mi-dia-a-dia1",
+  storageBucket:"mi-dia-a-dia1.firebasestorage.app",
+  messagingSenderId:"577738738649",
+  appId:"1:577738738649:web:0e427728004984cffba7c8"
+};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+let fs;
+try{fs=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})})}catch(e){fs=getFirestore(app)}
+window.FB_READY=true;
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+
+const SKIP="crecer.skip";
+const skipped=()=>{try{return localStorage.getItem(SKIP)==="1"}catch(e){return false}};
+const fresh=()=>({log:[],learned:{},goals:[],refl:{},habits:[]});
+const showLogin=v=>$("#login").classList.toggle("hidden",!v);
+function merge(a,b){ // a = base (nube), b = local
+  b=Object.assign(fresh(),b||{}); a=Object.assign(fresh(),a||{});
+  return {log:mergeById(a.log,b.log).sort((x,y)=>y.date.localeCompare(x.date)),
+    learned:Object.assign({},b.learned,a.learned),plan:a.plan||b.plan||{},
+    goals:mergeById(a.goals,b.goals),refl:Object.assign({},b.refl,a.refl),habits:mergeById(a.habits,b.habits)};
+}
+const sameSize=(a,b)=>a.log.length===b.log.length&&a.goals.length===b.goals.length&&a.habits.length===b.habits.length&&Object.keys(a.learned).length===Object.keys(b.learned).length&&Object.keys(a.refl).length===Object.keys(b.refl).length;
+
+async function login(){
+  $("#loginErr").textContent="";
+  const p=new GoogleAuthProvider();
+  try{await signInWithPopup(auth,p)}
+  catch(e){
+    if(e&&(e.code==="auth/popup-blocked"||e.code==="auth/operation-not-supported-in-this-environment")){try{await signInWithRedirect(auth,p)}catch(e2){$("#loginErr").textContent="No se pudo iniciar sesión: "+(e2.code||e2.message)}}
+    else if(e&&e.code!=="auth/popup-closed-by-user"&&e.code!=="auth/cancelled-popup-request")$("#loginErr").textContent="No se pudo iniciar sesión: "+(e.code||e.message);
+  }
+}
+document.addEventListener("click",async e=>{
+  const id=e.target.closest("button")?.id;
+  if(id==="loginBtn"||id==="loginBtn2"){login()}
+  if(id==="skipBtn"){try{localStorage.setItem(SKIP,"1")}catch(_){ }showLogin(false);renderAccount(null)}
+  if(id==="logoutBtn"){await signOut(auth)}
+});
+function renderAccount(u){
+  $("#account").innerHTML=u?`<span class="sync">${esc(u.displayName||u.email||"")}</span> <button class="btn" id="logoutBtn">Salir</button>`:`<button class="btn" id="loginBtn2">Entrar con Google</button>`;
+  if(!u)$("#sync").textContent="Guardado en este dispositivo";
+}
+getRedirectResult(auth).catch(e=>{$("#loginErr").textContent="No se pudo iniciar sesión: "+(e.code||e.message)});
+
+let wasUser=null;
+onAuthStateChanged(auth,async u=>{
+  if(!u){
+    docRef=null;
+    if(wasUser){ // cerró sesión: limpiar la vista para que el siguiente no vea estos datos
+      LSKEY=LS;state=fresh();loadLocal();renderAll();
+    }
+    wasUser=null;renderAccount(null);showLogin(!skipped());return;
+  }
+  wasUser=u.uid;showLogin(false);renderAccount(u);
+  // datos usados sin cuenta en este dispositivo: se pasan a la cuenta una sola vez
+  const anon=LSKEY===LS?state:fresh();
+  LSKEY=LS+"."+u.uid;state=fresh();loadLocal();
+  state=merge(state,anon);
+  if(anon.log.length||anon.habits.length||anon.goals.length){try{localStorage.removeItem(LS)}catch(_){}}
+  renderAll();
+  const ref=doc(fs,"users",u.uid,"data","estado");
+  docRef={set:d=>setDoc(ref,JSON.parse(JSON.stringify(d)))};
+  $("#sync").textContent="Sincronizando…";
+  try{
+    const snap=await getDoc(ref);
+    const remote=snap.exists()?Object.assign(fresh(),snap.data()):fresh();
+    state=merge(remote,state);
+    if(!sameSize(state,remote))save();else saveLocal();
+    $("#sync").textContent="☁️ Sincronizado";
+  }catch(e){$("#sync").textContent="Sin conexión · se sincronizará después"}
+  renderAll();
+});
+</script>
+</body>
+</html>
