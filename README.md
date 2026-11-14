@@ -1,6 +1,6 @@
 # Mi Día para Crecer
 
-Página para llevar un registro diario de actividades de crecimiento personal, salud, relajación en pareja y aprendizaje.
+Página para llevar un registro diario de actividades de crecimiento personal, salud y aprendizaje.
 
 - Plan diario sugerido y actividades propias.
 - Lecciones breves de cultura general.

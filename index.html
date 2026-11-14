@@ -131,7 +131,7 @@ input,select,textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid 
       <form id="habitForm" style="margin-top:10px">
         <label>Actividad</label><input id="hTitle" required placeholder="Ej. Tomar vitaminas, orar, practicar piano">
         <div class="two">
-          <div><label>Categoría</label><select id="hCat"><option value="grow">Crecimiento</option><option value="health">Salud</option><option value="couple">Pareja</option><option value="learn">Aprendizaje</option><option value="other">Otros</option></select></div>
+          <div><label>Categoría</label><select id="hCat"><option value="grow">Crecimiento</option><option value="health">Salud</option><option value="learn">Aprendizaje</option><option value="other">Otros</option></select></div>
           <div><label>Minutos</label><input id="hMin" type="number" min="0" value="15"></div>
         </div>
         <label>¿Qué días?</label>
@@ -151,7 +151,6 @@ input,select,textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid 
     <h2>Ideas de actividades</h2>
     <div class="chips" id="catChips"></div>
     <div id="ideas"></div>
-    <div id="talkBox"></div>
   </section>
 
   <!-- APRENDER -->
@@ -175,7 +174,7 @@ input,select,textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid 
       <input id="fTitle" required placeholder="Ej. Caminé en el parque">
       <div class="two">
         <div><label>Categoría</label>
-          <select id="fCat"><option value="grow">Crecimiento</option><option value="health">Salud</option><option value="couple">Pareja</option><option value="learn">Aprendizaje</option><option value="other">Otros</option></select></div>
+          <select id="fCat"><option value="grow">Crecimiento</option><option value="health">Salud</option><option value="learn">Aprendizaje</option><option value="other">Otros</option></select></div>
         <div><label>Minutos</label><input id="fMin" type="number" min="0" value="20"></div>
       </div>
       <div class="two">
@@ -215,7 +214,7 @@ input,select,textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid 
     <form class="card" id="reflForm">
       <label>🌟 Lo mejor de esta semana</label><textarea id="rGood" rows="2"></textarea>
       <label>🔧 Qué quiero mejorar</label><textarea id="rImprove" rows="2"></textarea>
-      <label>🙏 Algo que agradezco (a mí, a mi pareja, a la vida)</label><textarea id="rThanks" rows="2"></textarea>
+      <label>🙏 Algo que agradezco (a mí, a alguien más, a la vida)</label><textarea id="rThanks" rows="2"></textarea>
       <div class="btns"><button class="btn pri" type="submit">Guardar reflexión</button></div>
     </form>
   </section>
@@ -276,37 +275,8 @@ health:[
  ["Pausas activas","Levántate y muévete 2 minutos cada hora de trabajo.",10],
  ["Hora de dormir fija","Acuéstate a la misma hora para un sueño de 7–8 horas.",0],
  ["Cocina casera","Prepara una comida con ingredientes frescos en lugar de comida procesada.",40]
-],
-couple:[
- ["Paseo sin celulares","Caminen juntos dejando los teléfonos en casa o en silencio.",30],
- ["Cocinar algo nuevo","Elijan una receta que ninguno haya hecho y prepárenla en equipo.",60],
- ["Masaje relajante","Turnense 10 minutos cada uno: manos, hombros o espalda.",20],
- ["Spa en casa","Velas, música suave, mascarillas y un baño o ducha tibia.",45],
- ["Yoga o estiramientos juntos","Sigan una rutina suave de yoga para principiantes.",20],
- ["Noche de juegos","Un juego de mesa o de cartas, con apuesta divertida.",45],
- ["Picnic","En un parque, en el balcón o en la sala sobre una manta.",60],
- ["Leer en voz alta","Uno lee un capítulo de un libro mientras el otro se relaja.",20],
- ["Planear un sueño","Hablen de un viaje o proyecto que quieran hacer y den un primer paso.",30],
- ["Bailar","Pongan su canción favorita y bailen en la cocina.",10],
- ["Mirar las estrellas","Busquen un lugar oscuro, una manta y miren el cielo juntos.",30],
- ["Nota de aprecio","Escríbanse una nota con 3 cosas que admiran del otro.",10],
- ["Conversación profunda","Usen las preguntas de abajo para conocerse un poco más.",30],
- ["Meditación en pareja","Siéntense espalda con espalda y respiren al mismo ritmo 10 minutos.",10]
-]};
-const TALK=[
- "¿Qué momento de este año te ha hecho más feliz?",
- "¿Qué te gustaría que hiciéramos más seguido?",
- "¿Cuál es un sueño que aún no me has contado?",
- "¿Qué aprendiste de tu familia que quieres conservar?",
- "¿Cuándo te sentiste más apoyado(a) por mí?",
- "Si pudiéramos vivir un año en otro país, ¿cuál sería?",
- "¿Qué te preocupa últimamente y cómo puedo ayudarte?",
- "¿Qué recuerdo nuestro te hace sonreír siempre?",
- "¿Qué hábito te gustaría que construyéramos juntos?",
- "¿Cómo te imaginas un domingo perfecto?",
- "¿Qué es algo que admiras de ti mismo(a)?",
- "¿Qué significa para ti sentirte en casa?"
-];
+]
+};
 const LEARN={
 "Historia":{e:"🏛️",t:[
  ["La imprenta de Gutenberg","Hacia 1450, en Maguncia, Johannes Gutenberg combinó tipos móviles de metal con una prensa. Los libros se abarataron y las ideas comenzaron a circular mucho más rápido, lo que impulsó la Reforma protestante y, más tarde, la revolución científica.","¿Qué invento de nuestra época crees que tiene un impacto comparable?"],
@@ -453,7 +423,7 @@ function getPlan(){
   state.plan=state.plan||{};
   if(state.plan.date!==TODAY){
     const s=seed(TODAY);
-    state.plan={date:TODAY,grow:s%IDEAS.grow.length,health:(s>>4)%IDEAS.health.length,couple:(s>>8)%IDEAS.couple.length,learn:pickLearn()};
+    state.plan={date:TODAY,grow:s%IDEAS.grow.length,health:(s>>4)%IDEAS.health.length,learn:pickLearn()};
   }
   return state.plan;
 }
@@ -472,7 +442,7 @@ function ideaCard(c,item,opts={}){
 }
 function renderPlan(){
   const p=getPlan();
-  let h=ideaCard("grow",IDEAS.grow[p.grow],{shuffle:1})+ideaCard("health",IDEAS.health[p.health],{shuffle:1})+ideaCard("couple",IDEAS.couple[p.couple],{shuffle:1});
+  let h=ideaCard("grow",IDEAS.grow[p.grow],{shuffle:1})+ideaCard("health",IDEAS.health[p.health],{shuffle:1});
   const [a,i]=p.learn; const tp=LEARN[a].t[i]; const ld=!!state.learned[topicKey(a,i)];
   h+=`<div class="card learn"><span class="tag">📚 Aprende hoy · ${esc(a)}</span>
   <div class="title">${LEARN[a].e} ${esc(tp[0])}</div><p style="margin:4px 0 0">${esc(tp[1])}</p>
@@ -525,9 +495,8 @@ function renderAreas(){
 /* ---------- Ideas ---------- */
 let ideaCat="grow";
 function renderIdeas(){
-  $("#catChips").innerHTML=["grow","health","couple"].map(c=>`<button class="chip ${c===ideaCat?"on":""}" data-cat="${c}">${CATS[c].emoji} ${CATS[c].name}</button>`).join("");
+  $("#catChips").innerHTML=["grow","health"].map(c=>`<button class="chip ${c===ideaCat?"on":""}" data-cat="${c}">${CATS[c].emoji} ${CATS[c].name}</button>`).join("");
   $("#ideas").innerHTML=IDEAS[ideaCat].map(it=>ideaCard(ideaCat,it)).join("");
-  $("#talkBox").innerHTML=ideaCat==="couple"?`<h2>Preguntas para conversar</h2><div class="card couple"><p class="title" id="talkQ" style="font-size:18px">${TALK[seed(TODAY)%TALK.length]}</p><div class="btns"><button class="btn" id="nextTalk">↻ Otra pregunta</button></div></div>`:"";
 }
 
 /* ---------- Registro ---------- */
@@ -545,7 +514,7 @@ function renderStats(){
 }
 function renderLog(){
   const keys=new Set(weekDays().map(dkey));
-  const tot={grow:0,health:0,couple:0,learn:0,other:0},cnt={grow:0,health:0,couple:0,learn:0};
+  const tot={grow:0,health:0,learn:0,other:0},cnt={grow:0,health:0,learn:0};
   state.log.forEach(l=>{if(keys.has(l.date)&&tot[l.cat]!=null){tot[l.cat]+=+l.min||0;cnt[l.cat]++}});
   const max=Math.max(1,...Object.values(tot));
   const col={grow:"var(--grow)",health:"var(--health)",couple:"var(--couple)",learn:"var(--learn)",other:"var(--other)"};
@@ -567,7 +536,7 @@ function renderLog(){
 let wOffset=0;
 function weekStart(off){const d=new Date();const wd=(d.getDay()+6)%7;d.setDate(d.getDate()-wd+off*7);d.setHours(12,0,0,0);return d}
 function weekKeys(off){const s=weekStart(off);return Array.from({length:7},(_,i)=>{const d=new Date(s);d.setDate(s.getDate()+i);return dkey(d)})}
-const GOAL_IDEAS=["Caminar 3 veces 30 min","2 actividades en pareja","5 lecciones nuevas","Dormir 7 h al menos 5 noches","Leer 100 páginas","Meditar 4 días","1 cita sin celulares","Cocinar en casa 4 veces"];
+const GOAL_IDEAS=["Caminar 3 veces 30 min","5 lecciones nuevas","Dormir 7 h al menos 5 noches","Leer 100 páginas","Meditar 4 días","Un día sin redes sociales","Cocinar en casa 4 veces"];
 function renderWeek(){
   const ks=weekKeys(wOffset),wk=ks[0],set=new Set(ks);
   const f=k=>new Date(k+"T12:00:00").toLocaleDateString("es-MX",{day:"numeric",month:"short"});
@@ -575,13 +544,13 @@ function renderWeek(){
   $("#wNext").disabled=wOffset>=0;
   const L=state.log.filter(l=>set.has(l.date));
   const mins=L.reduce((a,l)=>a+(+l.min||0),0), days=new Set(L.map(l=>l.date)).size;
-  const learned=Object.values(state.learned).filter(d=>set.has(d)).length, couple=L.filter(l=>l.cat==="couple").length;
-  const cnt={grow:0,health:0,couple:0,learn:0};L.forEach(l=>{if(cnt[l.cat]!=null)cnt[l.cat]++});
+  const learned=Object.values(state.learned).filter(d=>set.has(d)).length, own=L.filter(l=>l.habit).length;
+  const cnt={grow:0,health:0,learn:0};L.forEach(l=>{if(cnt[l.cat]!=null)cnt[l.cat]++});
   const low=Object.keys(cnt).sort((a,b)=>cnt[a]-cnt[b])[0], high=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];
   const moods={};L.forEach(l=>{if(l.mood)moods[l.mood]=(moods[l.mood]||0)+1});
   const mood=Object.keys(moods).sort((a,b)=>moods[b]-moods[a])[0];
   $("#wSummary").innerHTML=`<div class="kpis"><div><b>${L.length}</b><span>actividades</span></div><div><b>${days}/7</b><span>días activos</span></div>
-   <div><b>${Math.round(mins/6)/10} h</b><span>tiempo invertido</span></div><div><b>${couple}</b><span>en pareja 💞</span></div>
+   <div><b>${Math.round(mins/6)/10} h</b><span>tiempo invertido</span></div><div><b>${own}</b><span>actividades propias ⭐</span></div>
    <div><b>${learned}</b><span>temas aprendidos</span></div><div><b>${mood||"—"}</b><span>ánimo más frecuente</span></div></div>`+
    `<div style="margin:6px 0 12px">${ks.map(k=>{const a=analyzeDay(k);const d=new Date(k+"T12:00:00").toLocaleDateString("es-MX",{weekday:"short",day:"numeric"});
      return `<div class="dayrow"><span>${d}</span><div class="progress" style="margin:0;height:10px"><i style="width:${a.score}%;background:${ringColor(a.score)}"></i></div><span class="sync">${k>TODAY?"—":a.score}</span></div>`}).join("")}</div>`+
@@ -614,16 +583,16 @@ function shiftKey(k,n){const d=new Date(k+"T12:00:00");d.setDate(d.getDate()+n);
 function dayMins(k){return state.log.filter(l=>l.date===k).reduce((a,l)=>a+(+l.min||0),0)}
 function analyzeDay(k){
   const L=state.log.filter(l=>l.date===k), mins=L.reduce((a,l)=>a+(+l.min||0),0);
-  const core=["grow","health","couple","learn"], cats=new Set(L.map(l=>l.cat));
+  const core=["grow","health","learn"], cats=new Set(L.map(l=>l.cat));
   const covered=core.filter(c=>cats.has(c)), missing=core.filter(c=>!cats.has(c));
   const hs=habitsFor(k), hd=hs.filter(x=>L.some(l=>l.habit===x.id)).length;
   const hPart=hs.length?hd/hs.length:Math.min(1,L.length/4);
-  const score=L.length?Math.round(covered.length/4*70+hPart*30):0;
+  const score=L.length?Math.round(covered.length/3*70+hPart*30):0;
   const label=score>=85?"Excelente":score>=60?"Muy bien":score>=35?"Buen avance":score>0?"Buen comienzo":"Sin registros";
   const msgs=[];
   if(!L.length)msgs.push(k===TODAY?"Aún no registras nada hoy. Una sola actividad ya cuenta.":"No registraste actividades este día.");
   else{
-    msgs.push(covered.length===4?"¡Día completo! Cubriste las cuatro áreas.":`Cubriste ${covered.length} de 4 áreas${missing.length?"; faltó "+missing.map(c=>CATS[c].name.toLowerCase()).join(", "):""}.`);
+    msgs.push(covered.length===3?"¡Día completo! Cubriste las tres áreas: crecimiento, salud y aprendizaje.":`Cubriste ${covered.length} de 3 áreas${missing.length?"; faltó "+missing.map(c=>CATS[c].name.toLowerCase()).join(", "):""}.`);
     if(hs.length)msgs.push(`Cumpliste ${hd} de ${hs.length} de tus actividades propias.`);
     const prev=[1,2,3,4,5,6,7].map(i=>dayMins(shiftKey(k,-i))), act=prev.filter(m=>m>0);
     if(act.length){const avg=act.reduce((a,b)=>a+b,0)/act.length;
@@ -688,7 +657,6 @@ document.addEventListener("click",e=>{
   if(t.id==="wNext"){if(wOffset<0)wOffset++;renderWeek();return}
   if(t.dataset.gadd){addGoal(t.dataset.gadd);return}
   if(t.dataset.gdel){state.goals=state.goals.filter(g=>g.id!==t.dataset.gdel);save();renderWeek();return}
-  if(t.id==="nextTalk"){const q=$("#talkQ");let n;do{n=TALK[Math.floor(Math.random()*TALK.length)]}while(n===q.textContent);q.textContent=n;return}
 });
 document.addEventListener("change",e=>{const hb=e.target.dataset&&e.target.dataset.habit;
   if(hb){const x=state.habits.find(z=>z.id===hb);if(!x)return;
